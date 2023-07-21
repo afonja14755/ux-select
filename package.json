@@ -1,0 +1,31 @@
+{
+  "name": "ux-select",
+  "version": "1.0.0",
+  "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
+  "type": "module",
+  "keywords": [
+    "HTMLSelect",
+    "select",
+    "multiple select",
+    "disabled select",
+    "group option select",
+    "ui select",
+    "ux select",
+    "lightweight",
+    "Native JavaScript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afonja14755/ux-select.git"
+  },
+  "author": "Afonchenkov Dmitrii <afonja14755@gmail.com>",
+  "license": "MIT",
+  "prettier": {
+    "printWidth": 120,
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": false,
+    "arrowParens": "avoid",
+    "endOfLine": "lf"
+  }
+}
