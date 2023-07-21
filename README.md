@@ -4,13 +4,10 @@ UX Select — free and lightweight native JavaScript plugin that replace native 
 
 ## Usage
 
-### Include plugins files to your project:
+### Include plugin file to your project from _dist_ directory:
 
 ```html
-<script src="path/to/ux-select.js"></script>
-```
-```html
-<link rel="stylesheet" href="path/to/ux-select.css"/>
+<script src="path/to/ux-select.min.js"></script>
 ```
 
 ### Initialize plugin
