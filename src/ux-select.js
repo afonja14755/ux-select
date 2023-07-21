@@ -1,3 +1,5 @@
+import "./ux-select.scss";
+
 /* utils */
 function triggerChange(el) {
   const change = new Event("change");

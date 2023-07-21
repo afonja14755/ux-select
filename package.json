@@ -2,7 +2,6 @@
   "name": "ux-select",
   "version": "1.0.0",
   "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
-  "type": "module",
   "keywords": [
     "HTMLSelect",
     "select",
@@ -14,12 +13,10 @@
     "lightweight",
     "Native JavaScript"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/afonja14755/ux-select.git"
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
   },
-  "author": "Afonchenkov Dmitrii <afonja14755@gmail.com>",
-  "license": "MIT",
   "prettier": {
     "printWidth": 120,
     "tabWidth": 2,
@@ -27,5 +24,23 @@
     "singleQuote": false,
     "arrowParens": "avoid",
     "endOfLine": "lf"
-  }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.8.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "sass": "^1.64.0",
+    "sass-loader": "^13.3.2",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afonja14755/ux-select.git"
+  },
+  "author": "Afonchenkov Dmitrii <afonja14755@gmail.com>",
+  "license": "MIT"
 }
