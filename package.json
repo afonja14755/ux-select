@@ -1,6 +1,6 @@
 {
   "name": "ux-select",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
   "keywords": [
     "HTMLSelect",
@@ -11,11 +11,16 @@
     "ui select",
     "ux select",
     "lightweight",
-    "Native JavaScript"
+    "TypeScript",
+    "Native JavaScript",
+    "Vanilla JavaScript",
+    "ES-module",
+    "Non ES-module"
   ],
+  "type": "module",
   "scripts": {
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "dev": "vite",
+    "build": "tsc && vite build"
   },
   "prettier": {
     "printWidth": 120,
@@ -26,16 +31,11 @@
     "endOfLine": "lf"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.9",
-    "@babel/preset-env": "^7.22.9",
-    "babel-loader": "^9.1.3",
-    "css-loader": "^6.8.1",
-    "mini-css-extract-plugin": "^2.7.6",
-    "sass": "^1.64.0",
-    "sass-loader": "^13.3.2",
-    "style-loader": "^3.3.3",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "@types/node": "^20.4.4",
+    "path": "^0.12.7",
+    "sass": "^1.64.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.7"
   },
   "repository": {
     "type": "git",
