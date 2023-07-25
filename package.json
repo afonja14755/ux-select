@@ -7,6 +7,7 @@
     "select",
     "multiple select",
     "disabled select",
+    "searchable select",
     "group option select",
     "ui select",
     "ux select",
@@ -41,6 +42,10 @@
     "type": "git",
     "url": "https://github.com/afonja14755/ux-select.git"
   },
-  "author": "Afonchenkov Dmitrii <afonja14755@gmail.com>",
-  "license": "MIT"
+  "author": "Afonchenkov Dmitrii <afonchenkov.dmitrii@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/afonja14755/ux-select/issues"
+  },
+  "homepage": "https://github.com/afonja14755/ux-select"
 }
