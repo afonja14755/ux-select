@@ -2,31 +2,14 @@
 
 UX Select — free and lightweight native(vanilla) JavaScript plugin that replace native select elements with customization.
 
+## Installation
+
+1. Install plugin files from _dist_ directory;
+2. Add files to your project:
+   - **ux-select.min.js** - ES-module;
+   - **ux-select.min.iife.js** - Non ES-module.
+
 ## Usage
-
-### Include plugin files to your project from _dist_ directory:
-
-### Add styles
-
-```html
-<link rel="stylesheet" href="path/to/ux-select.min.css" type="text/css"/>
-```
-
-### Add Script
-
-#### ES-module
-
-```javascript
-import UxSelect from "path/to/ux-select.min.js";
-```
-
-#### Non ES-module
-
-```html
-<script src="path/to/ux-select.min.iife.js"></script>
-```
-
-### Initialize plugin
 
 ```javascript
 const myUxSelect = new UxSelect(element, options);
@@ -63,6 +46,12 @@ Example: `data-clear-text="Clear all"`.
 - `update(isTriggerChange)`: update ux-select to match with native select (options and disable state). Add false if you 
 don't need to trigger "change" event at native select.
 - `clear()`: clear selected options
+
+## License
+
+UX Select is licensed by [MIT](https://choosealicense.com/licenses/mit/)
+
+It can be used **for free** and **without any attribution**, in any personal or commercial project.
 
 ## Future additions
 
