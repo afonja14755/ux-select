@@ -173,6 +173,12 @@
 	&-group {
 		$this: &;
 
+		&.-disabled {
+			#{$this}__title{
+				color: var(--uxs-option-disable-color);
+			}
+		}
+
 		&.-empty {
 			#{$this}__elem {
 				padding: var(--uxs-padding-y) var(--uxs-padding-x);
