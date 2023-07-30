@@ -1,4 +1,4 @@
-interface UxSelectConstructorOptions {
+export interface UxSelectConstructorOptions {
   isSearchable: boolean;
   isGroupOptions: boolean;
   placeholder: string | undefined;
@@ -7,7 +7,7 @@ interface UxSelectConstructorOptions {
   selectedText: string | undefined;
 }
 
-interface UxSelectOptionObject {
+export interface UxSelectOptionObject {
   attributes: {
     selected: boolean;
     disabled: boolean;

@@ -1,5 +1,7 @@
 import "./ux-select.scss";
 
+import { UxSelectConstructorOptions, UxSelectOptionObject } from "./types.ts";
+
 import triggerChange from "./utils/events/triggerChange.ts";
 import triggerInput from "./utils/events/triggerInput.ts";
 
@@ -22,7 +24,7 @@ export default class UxSelect {
   state: { multiple: boolean; disabled: boolean };
   options: UxSelectOptionObject[];
   groups: string[];
-  #uxEl: any;
+  #uxEl: Element | undefined;
 
   constructor(element: HTMLSelectElement, options: UxSelectConstructorOptions) {
     this.el = element;
@@ -46,7 +48,7 @@ export default class UxSelect {
     this.options = [];
     this.groups = [];
 
-    this.#uxEl = null;
+    this.#uxEl = undefined;
 
     this.#init();
   }
@@ -88,22 +90,25 @@ export default class UxSelect {
   }
 
   #setSelectState(values: string[] = []): void {
-    const selectTitle = this.#uxEl.querySelector(".ux-select__title");
-    if (values.length === 1) {
-      selectTitle.textContent = values[0];
-      this.#uxEl.classList.add("-filled");
-    } else if (values.length > 0 && this.state.multiple) {
-      selectTitle.textContent = `${this.text.selectedText} ${values.length}`;
-      this.#uxEl.classList.add("-filled");
-    } else {
-      selectTitle.textContent = this.text.placeholder;
-      this.#uxEl.classList.remove("-filled");
+    if (this.#uxEl) {
+      const selectTitle = this.#uxEl.querySelector(".ux-select__title");
+      if (!selectTitle) throw Error("selectTitle is null");
+      if (values.length === 1) {
+        selectTitle.textContent = values[0];
+        this.#uxEl.classList.add("-filled");
+      } else if (values.length > 0 && this.state.multiple) {
+        selectTitle.textContent = `${this.text.selectedText} ${values.length}`;
+        this.#uxEl.classList.add("-filled");
+      } else {
+        selectTitle.textContent = this.text.placeholder;
+        this.#uxEl.classList.remove("-filled");
+      }
     }
   }
 
   #renderOptions(): void {
     new Promise(resolve => {
-      let selectedValues: string[] = [];
+      const selectedValues: string[] = [];
 
       this.options.forEach(option => {
         const selectListElem = document.createElement("li");
@@ -118,10 +123,12 @@ export default class UxSelect {
 
         selectListElem.addEventListener("click", this.#onClickOption.bind(this));
 
-        const selectGroupList = this.#uxEl.querySelector(
-          `[data-ux-group="${option.attributes.group}"] .ux-select-group__list`,
-        );
-        selectGroupList.appendChild(selectListElem);
+        if (this.#uxEl) {
+          const selectGroupList: HTMLElement | null = this.#uxEl.querySelector(
+            `[data-ux-group="${option.attributes.group}"] .ux-select-group__list`,
+          );
+          if (selectGroupList) selectGroupList.appendChild(selectListElem);
+        }
       });
 
       this.#setSelectState(selectedValues);
@@ -130,48 +137,53 @@ export default class UxSelect {
     }).then(isGroup => {
       if (!isGroup) return;
 
-      const groups = this.#uxEl.querySelectorAll(".ux-select-group");
-      if (groups.length > 0) {
-        groups.forEach((group: HTMLElement) => {
-          const groupList = group.querySelector(".ux-select-group__list");
-          if (groupList) {
-            const groupElements = groupList.querySelectorAll(".ux-select-group__elem"),
-              groupDisabledElements = groupList.querySelectorAll(".ux-select-group__elem.-disabled");
+      if (this.#uxEl) {
+        const groups: NodeListOf<HTMLDivElement> = this.#uxEl.querySelectorAll(".ux-select-group");
+        if (groups.length > 0) {
+          groups.forEach((group: HTMLElement) => {
+            const groupList = group.querySelector(".ux-select-group__list");
+            if (groupList) {
+              const groupElements = groupList.querySelectorAll(".ux-select-group__elem"),
+                groupDisabledElements = groupList.querySelectorAll(".ux-select-group__elem.-disabled");
 
-            groupElements.length === groupDisabledElements.length
-              ? group.classList.add("-disabled")
-              : group.classList.remove("-disabled");
-          }
-        });
+              groupElements.length === groupDisabledElements.length
+                ? group.classList.add("-disabled")
+                : group.classList.remove("-disabled");
+            }
+          });
+        }
       }
     });
   }
 
   #renderGroups(): void {
-    const uxSelectList = this.#uxEl.querySelector(".ux-select__dropdown");
-    uxSelectList.innerHTML = "";
-    this.groups.forEach(group => {
-      const selectGroup = document.createElement("div");
-      selectGroup.classList.add("ux-select__group", "ux-select-group");
-      if (group === "empty") selectGroup.classList.add("-empty");
-      selectGroup.dataset.uxGroup = group;
+    if (this.#uxEl) {
+      const uxSelectList = this.#uxEl.querySelector(".ux-select__dropdown");
+      if (!uxSelectList) throw Error("uxSelectList is null");
+      uxSelectList.innerHTML = "";
+      this.groups.forEach(group => {
+        const selectGroup = document.createElement("div");
+        selectGroup.classList.add("ux-select__group", "ux-select-group");
+        if (group === "empty") selectGroup.classList.add("-empty");
+        selectGroup.dataset.uxGroup = group;
 
-      if (group !== "empty") {
-        const selectGroupTitle = document.createElement("div");
-        selectGroupTitle.classList.add("ux-select-group__title");
-        selectGroupTitle.textContent = group;
+        if (group !== "empty") {
+          const selectGroupTitle = document.createElement("div");
+          selectGroupTitle.classList.add("ux-select-group__title");
+          selectGroupTitle.textContent = group;
 
-        selectGroup.appendChild(selectGroupTitle);
-      }
+          selectGroup.appendChild(selectGroupTitle);
+        }
 
-      const selectGroupList = document.createElement("ul");
-      selectGroupList.classList.add("ux-select-group__list");
+        const selectGroupList = document.createElement("ul");
+        selectGroupList.classList.add("ux-select-group__list");
 
-      selectGroup.appendChild(selectGroupList);
-      uxSelectList.appendChild(selectGroup);
-    });
+        selectGroup.appendChild(selectGroupList);
+        uxSelectList.appendChild(selectGroup);
+      });
 
-    this.#renderOptions();
+      this.#renderOptions();
+    }
   }
 
   #renderSelect(): void {
@@ -218,7 +230,7 @@ export default class UxSelect {
     const select = document.createElement("div");
 
     /* Create class list for select element */
-    let classes = ["ux-select", this.el.classList];
+    const classes = ["ux-select", this.el.classList];
     if (this.state.multiple) classes.push("-multiple");
     if (this.state.disabled) classes.push("-disabled");
     select.className = classes.join(" ");
@@ -227,13 +239,13 @@ export default class UxSelect {
     /** Append UX select */
     this.el.insertAdjacentElement("afterend", select);
 
-    this.#uxEl = this.el.nextElementSibling;
+    if (this.el.nextElementSibling) this.#uxEl = this.el.nextElementSibling;
 
     this.#renderGroups();
   }
 
   disable(): void {
-    if (!this.state.disabled) {
+    if (!this.state.disabled && this.#uxEl) {
       this.el.disabled = true;
       this.#uxEl.classList.add("-disabled");
       this.state.disabled = true;
@@ -241,7 +253,7 @@ export default class UxSelect {
   }
 
   enable(): void {
-    if (this.state.disabled) {
+    if (this.state.disabled && this.#uxEl) {
       this.el.disabled = false;
       this.#uxEl.classList.remove("-disabled");
       this.state.disabled = false;
@@ -259,9 +271,11 @@ export default class UxSelect {
 
   clear(): void {
     this.options.forEach(option => {
-      if (option.attributes.selected) {
+      if (option.attributes.selected && this.#uxEl) {
         option.attributes.selected = false;
-        this.#uxEl.querySelector(`[data-value="${option.data.value}"]`).classList.remove("-selected");
+
+        const uxOption = this.#uxEl.querySelector(`[data-value="${option.data.value}"]`);
+        if (uxOption) uxOption.classList.remove("-selected");
         option.element.removeAttribute("selected");
       }
     });
@@ -271,33 +285,40 @@ export default class UxSelect {
   }
 
   destroy(): void {
-    this.#uxEl.remove();
-    this.el.style.display = "";
+    if (this.#uxEl) {
+      this.#uxEl.remove();
+      this.el.style.display = "";
+    }
   }
 
   #onToggleShown(e: Event): void {
     e.preventDefault();
+    const targetEl = e.target as HTMLElement;
 
     if (this.state.disabled) return;
+    if (!this.#uxEl) throw Error("uxEl is null");
 
-    if (
-      e.target !== this.#uxEl.querySelector(".ux-select__clear") &&
-      !this.#uxEl.querySelector(".ux-select__body").contains(e.target)
-    ) {
+    const uxSelectBody = this.#uxEl.querySelector(".ux-select__body");
+    if (!uxSelectBody) throw Error("uxSelectBody is null");
+    if (e.target !== this.#uxEl.querySelector(".ux-select__clear") && !uxSelectBody.contains(targetEl)) {
       if (this.#uxEl.classList.contains("-shown")) {
         this.#uxEl.classList.remove("-shown");
       } else {
         this.#uxEl.classList.add("-shown");
         if (this.config.isSearchable) {
-          this.#uxEl.querySelector(".ux-select-search__input").value = "";
-          this.#uxEl.querySelector(".ux-select-search__input").focus();
+          const uxSearch: HTMLInputElement | null = this.#uxEl.querySelector(".ux-select-search__input");
+          if (!uxSearch) throw Error("Search input is null");
+          uxSearch.value = "";
+          uxSearch.focus();
         }
       }
     }
   }
 
   #onClickOutside(e: Event): void {
-    if (!this.#uxEl.contains(e.target)) this.#uxEl.classList.remove("-shown");
+    const targetEl = e.target as HTMLElement;
+    if (!this.#uxEl) throw Error("uxEl is null");
+    if (!this.#uxEl.contains(targetEl)) this.#uxEl.classList.remove("-shown");
   }
 
   #onClickClear(e: Event): boolean | void {
@@ -340,13 +361,13 @@ export default class UxSelect {
   }
 
   #onSearch(e: Event): void {
-    if (e.target !== null) {
+    if (e.target !== null && this.#uxEl) {
       const input = e.target as HTMLInputElement,
         text = input.value.toLowerCase(),
-        groups = this.#uxEl.querySelectorAll(".ux-select-group");
+        groups: NodeListOf<HTMLDivElement> = this.#uxEl.querySelectorAll(".ux-select-group");
 
       if (text === "") {
-        const options = this.#uxEl.querySelectorAll(".ux-select-group__elem");
+        const options: NodeListOf<HTMLDivElement> = this.#uxEl.querySelectorAll(".ux-select-group__elem");
 
         options.forEach((option: HTMLElement) => (option.style.display = ""));
         if (this.config.isGroupOptions) {
@@ -357,9 +378,11 @@ export default class UxSelect {
 
         new Promise(resolve => {
           this.options.forEach(option => {
+            if (!this.#uxEl) throw Error("uxEl is null");
             const match = searchValue.test(option.data.text.toLowerCase()),
-              uxOption = this.#uxEl.querySelector(`[data-value="${option.data.value}"]`);
+              uxOption: HTMLDivElement | null = this.#uxEl.querySelector(`[data-value="${option.data.value}"]`);
 
+            if (!uxOption) throw Error("uxOption is null");
             uxOption.style.display = match ? "" : "none";
           });
           this.config.isGroupOptions ? resolve(true) : resolve(false);
@@ -377,13 +400,18 @@ export default class UxSelect {
   }
 
   #bindEvents(): void {
-    this.#uxEl.addEventListener("click", this.#onToggleShown.bind(this));
-    this.#uxEl.querySelector(".ux-select__clear").addEventListener("click", this.#onClickClear.bind(this));
+    if (this.#uxEl) {
+      this.#uxEl.addEventListener("click", this.#onToggleShown.bind(this));
 
-    window.addEventListener("click", this.#onClickOutside.bind(this));
+      const clearBtn = this.#uxEl.querySelector(".ux-select__clear");
+      if (clearBtn) clearBtn.addEventListener("click", this.#onClickClear.bind(this));
 
-    if (this.config.isSearchable) {
-      this.#uxEl.querySelector(".ux-select-search__input").addEventListener("input", this.#onSearch.bind(this));
+      window.addEventListener("click", this.#onClickOutside.bind(this));
+
+      if (this.config.isSearchable) {
+        const searchInput = this.#uxEl.querySelector(".ux-select-search__input");
+        if (searchInput) searchInput.addEventListener("input", this.#onSearch.bind(this));
+      }
     }
   }
 }
