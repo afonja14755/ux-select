@@ -1,6 +1,6 @@
 {
   "name": "ux-select",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
   "keywords": [
     "HTMLSelect",
