@@ -4,7 +4,9 @@ UX Select — free and lightweight native(vanilla) JavaScript plugin that replac
 
 ## Status
 
-[![npm version](https://img.shields.io/npm/v/ux-select?logo=npm&logoColor=fff)](https://www.npmjs.com/package/ux-select)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/afonja14755/ux-select/format.yml?logo=github%20actions&label=Prettier&labelColor=%23fff)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/afonja14755/ux-select/lint.yml?logo=github%20actions&label=ESLint&labelColor=%23fff)
+[![npm](https://img.shields.io/npm/v/ux-select?logo=npm&logoColor=%232088FF&labelColor=%23FFF)](https://www.npmjs.com/package/ux-select)
 
 ## Installation
 
