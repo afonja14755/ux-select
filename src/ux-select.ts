@@ -309,6 +309,7 @@ export default class UxSelect {
           const uxSearch: HTMLInputElement | null = this.#uxEl.querySelector(".ux-select-search__input");
           if (!uxSearch) throw Error("Search input is null");
           uxSearch.value = "";
+          uxSearch.dispatchEvent(new Event("input"));
           uxSearch.focus();
         }
       }
@@ -390,6 +391,7 @@ export default class UxSelect {
           if (!res) return;
           groups.forEach((group: HTMLElement) => {
             const groupList = group.querySelector(".ux-select-group__list");
+            group.style.display = "";
             if (groupList) group.style.display = groupList.clientHeight !== 0 ? "" : "none";
           });
         });

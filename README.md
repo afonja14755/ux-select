@@ -3,6 +3,7 @@
 UX Select — free and lightweight native(vanilla) JavaScript plugin that replace native select elements with customization.
 
 ## Status
+
 [![npm version](https://img.shields.io/npm/v/ux-select?logo=npm&logoColor=fff)](https://www.npmjs.com/package/ux-select)
 
 ## Installation
