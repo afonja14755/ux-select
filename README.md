@@ -25,7 +25,7 @@ Install plugin files from **_dist_** directory;
 ### ES-module
 
 ```javascript
-import { uxSelect } from "ux-select/dist/ux-select.min.umd.cjs";
+import uxSelect from "ux-select/dist/ux-select.min.js";
 ```
 
 ### Non ES-module
