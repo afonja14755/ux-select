@@ -44,6 +44,10 @@ import uxSelect from "ux-select/dist/ux-select.min.js";
 const myUxSelect = new UxSelect(element, options);
 ```
 
+## Style customization
+
+You can customize styles by replace CSS-variables what contain "--uxs" prefix and placed on :root.
+
 ## Options
 
 ### Configuration
