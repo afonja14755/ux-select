@@ -24,6 +24,7 @@
   "scripts": {
     "build": "tsc && vite build && vite build --config vite.config.iife.ts",
     "lint": "eslint --ignore-path .eslintignore .",
+    "check-format": "prettier --ignore-path .prettierignore -l .",
     "format": "prettier --ignore-path .prettierignore -w ."
   },
   "devDependencies": {
