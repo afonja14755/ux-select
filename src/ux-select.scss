@@ -29,8 +29,16 @@ $prefix: --uxs;
   #{$prefix}-clear-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve'%3E%3Cg%3E%3Cpath d='M6,19c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l12-12c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-12,12C6.5,18.9,6.3,19,6,19z' /%3E%3Cpath d='M18,19c-0.3,0-0.5-0.1-0.7-0.3l-12-12c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l12,12c0.4,0.4,0.4,1,0,1.4 C18.5,18.9,18.3,19,18,19z'/%3E%3C/g%3E%3C/svg%3E%0A");
   #{$prefix}-clear-image-disable: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve'%3E%3Cg%3E%3Cpath fill='rgb(130 130 130)' d='M6,19c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l12-12c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-12,12C6.5,18.9,6.3,19,6,19z' /%3E%3Cpath fill='rgb(130 130 130)' d='M18,19c-0.3,0-0.5-0.1-0.7-0.3l-12-12c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l12,12c0.4,0.4,0.4,1,0,1.4 C18.5,18.9,18.3,19,18,19z'/%3E%3C/g%3E%3C/svg%3E%0A");
 
+  #{$prefix}-search-bg: rgb(255 255 255);
+  #{$prefix}-search-color: rgb(255 255 255);
+  #{$prefix}-search-placeholder: rgb(169 169 169);
+
   #{$prefix}-transition-duration: 0.2s;
   #{$prefix}-transition-easing: ease-in-out;
+
+  #{$prefix}-scrollbar-track-color: rgb(189 189 189);
+  #{$prefix}-scrollbar-thumb-color: rgb(117 117 117);
+  #{$prefix}-scrollbar-thumb-hover-color: rgb(97 97 97);
 }
 
 .ux-select {
@@ -156,7 +164,13 @@ $prefix: --uxs;
       padding: var(--uxs-padding-y) calc(var(--uxs-padding-x) - 3px);
       border: var(--uxs-border-width) solid var(--uxs-border-color);
       border-radius: var(--uxs-border-radius);
+      background-color: var(--uxs-search-bg);
+      color: var(--uxs-search-color);
       transition: border-color var(--uxs-transition-duration) var(--uxs-transition-easing);
+
+      &::placeholder {
+        color: var(--uxs-search-placeholder);
+      }
 
       &::-ms-clear,
       &::-ms-reveal {
@@ -186,6 +200,27 @@ $prefix: --uxs;
   &__dropdown {
     max-height: calc(((var(--uxs-font-size) * var(--uxs-line-height)) + (var(--uxs-padding-y) * 2)) * 5);
     overflow-y: auto;
+
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--uxs-scrollbar-track-color) var(--uxs-scrollbar-thumb-color);
+
+    &::-webkit-scrollbar {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+
+      &-track {
+        background-color: var(--uxs-scrollbar-track-color);
+      }
+
+      &-thumb {
+        background-color: var(--uxs-scrollbar-thumb-color);
+        &:hover {
+          background-color: var(--uxs-scrollbar-thumb-hover-color);
+        }
+      }
+    }
   }
 
   &-group {
