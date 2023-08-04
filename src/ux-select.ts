@@ -10,12 +10,13 @@ export default class UxSelect {
   config: {
     isSearchable: boolean;
     isGroupOptions: boolean;
+    optionStyle: "checkbox" | "radio" | "default";
     placeholder: string | undefined;
     searchText: string | undefined;
     clearText: string | undefined;
     selectedText: string | undefined;
   };
-  text: {
+  localization: {
     placeholder: string;
     searchText: string;
     clearText: string;
@@ -31,9 +32,10 @@ export default class UxSelect {
     this.config = options || {
       isSearchable: false,
       isGroupOptions: false,
+      optionStyle: "default",
     };
 
-    this.text = {
+    this.localization = {
       placeholder: this.el.dataset.placeholder || this.config.placeholder || "Select an option",
       searchText: this.el.dataset.searchText || this.config.searchText || "Search",
       clearText: this.el.dataset.clearText || this.config.clearText || "Clear option(s)",
@@ -97,10 +99,10 @@ export default class UxSelect {
         selectTitle.textContent = values[0];
         this.#uxEl.classList.add("-filled");
       } else if (values.length > 0 && this.state.multiple) {
-        selectTitle.textContent = `${this.text.selectedText} ${values.length}`;
+        selectTitle.textContent = `${this.localization.selectedText} ${values.length}`;
         this.#uxEl.classList.add("-filled");
       } else {
-        selectTitle.textContent = this.text.placeholder;
+        selectTitle.textContent = this.localization.placeholder;
         this.#uxEl.classList.remove("-filled");
       }
     }
@@ -195,12 +197,12 @@ export default class UxSelect {
 
     const selectTitle = document.createElement("div");
     selectTitle.classList.add("ux-select__title");
-    selectTitle.textContent = this.text.placeholder;
+    selectTitle.textContent = this.localization.placeholder;
 
     const selectClear = document.createElement("button");
     selectClear.type = "button";
     selectClear.classList.add("ux-select__clear");
-    selectClear.title = this.text.clearText;
+    selectClear.title = this.localization.clearText;
 
     selectHead.append(selectTitle, selectClear);
 
@@ -215,7 +217,7 @@ export default class UxSelect {
       const selectSearch = document.createElement("input");
       selectSearch.type = "search";
       selectSearch.classList.add("ux-select-search__input");
-      selectSearch.placeholder = this.text.searchText;
+      selectSearch.placeholder = this.localization.searchText;
 
       selectSearchWrap.appendChild(selectSearch);
       selectBody.appendChild(selectSearchWrap);
@@ -233,6 +235,7 @@ export default class UxSelect {
     const classes = ["ux-select", this.el.classList];
     if (this.state.multiple) classes.push("-multiple");
     if (this.state.disabled) classes.push("-disabled");
+    if (this.config.optionStyle !== "default") classes.push(`-${this.config.optionStyle}`);
     select.className = classes.join(" ");
 
     select.append(selectHead, selectBody);

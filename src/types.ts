@@ -1,6 +1,7 @@
 export interface UxSelectConstructorOptions {
   isSearchable: boolean;
   isGroupOptions: boolean;
+  optionStyle: "checkbox" | "radio" | "default";
   placeholder: string | undefined;
   searchText: string | undefined;
   clearText: string | undefined;

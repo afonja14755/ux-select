@@ -60,6 +60,7 @@ You can customize styles by replace CSS-variables what contain "--uxs" prefix an
     ```html
     <option value="" data-ux-select-group="MyUxGroup"></option>
     ```
+- `optionStyle`. Default: `default`. Valid values: `checkbox` & `radio`. Adding styled option like checkbox or radio.
 
 ### Text
 
