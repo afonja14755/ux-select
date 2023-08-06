@@ -4,9 +4,11 @@ UX Select — free and lightweight native(vanilla) JavaScript plugin that replac
 
 ## Status
 
+[![npm](https://img.shields.io/npm/v/ux-select?logo=npm&logoColor=%232088FF&labelColor=%23FFF)](https://www.npmjs.com/package/ux-select)
+[![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/ux-select?logo=jsdelivr&logoColor=blue&labelColor=white&color=blue)](https://cdn.jsdelivr.net/npm/ux-select@1.5.0/)
+[![Static Badge](https://img.shields.io/badge/StackBlitz-examples-blue?logo=stackblitz&logoColor=blue&labelColor=white)](https://stackblitz.com/@afonja14755/collections/ux-select)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/afonja14755/ux-select/format.yml?logo=github%20actions&label=Prettier&labelColor=%23fff)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/afonja14755/ux-select/lint.yml?logo=github%20actions&label=ESLint&labelColor=%23fff)
-[![npm](https://img.shields.io/npm/v/ux-select?logo=npm&logoColor=%232088FF&labelColor=%23FFF)](https://www.npmjs.com/package/ux-select)
 
 ## Installation
 
@@ -28,7 +30,7 @@ Install plugin files from **_dist_** directory;
 ### ES-module
 
 ```javascript
-import uxSelect from "ux-select/dist/ux-select.min.js";
+import UxSelect from "ux-select/dist/ux-select.min.js";
 ```
 
 ### Non ES-module

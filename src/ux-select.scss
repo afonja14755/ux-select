@@ -30,7 +30,7 @@ $prefix: --uxs;
   #{$prefix}-clear-image-disable: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve'%3E%3Cg%3E%3Cpath fill='rgb(130 130 130)' d='M6,19c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l12-12c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-12,12C6.5,18.9,6.3,19,6,19z' /%3E%3Cpath fill='rgb(130 130 130)' d='M18,19c-0.3,0-0.5-0.1-0.7-0.3l-12-12c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l12,12c0.4,0.4,0.4,1,0,1.4 C18.5,18.9,18.3,19,18,19z'/%3E%3C/g%3E%3C/svg%3E%0A");
 
   #{$prefix}-search-bg: rgb(255 255 255);
-  #{$prefix}-search-color: rgb(255 255 255);
+  #{$prefix}-search-color: rgb(34 34 34);
   #{$prefix}-search-placeholder: rgb(169 169 169);
 
   #{$prefix}-transition-duration: 0.2s;
