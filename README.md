@@ -52,38 +52,8 @@ const myUxSelect = new UxSelect(element, options);
 
 You can customize styles by replace CSS-variables what contain "--uxs" prefix and placed on :root.
 
-## Options
-
-### Configuration
-
-- `isSearchable`. Default: `false`. If true adding search input.
-- `isGroupOptions`. Default: `false`. Description below.
-  - To add groups, need add **data-ux-select-group** attribute to options.
-    ```html
-    <option value="" data-ux-select-group="MyUxGroup"></option>
-    ```
-- `optionStyle`. Default: `default`. Valid values: `checkbox` & `radio`. Adding styled option like checkbox or radio.
-
-### Text
-
-Options for translating text values into the required language.
-
-- `placeholder`. Default: **"Select an option"**. Placeholder
-- `searchText`. Default: **"Search"**. Search field placeholder
-- `clearText`. Default: **"Clear option(s)"**. Clear button title
-- `selectedText`. Default: **"Selected:"**. Multiple select, when selected more than 1 option.
-
-All this options can be added by html attribute data-option-name.
-
-Example: `data-clear-text="Clear all"`.
-
-## Methods
-
-- `disable()`: disable select
-- `enable()`: enable select
-- `update(isTriggerChange)`: update ux-select to match with native select (options and disable state). Add false if you
-  don't need to trigger "change" event at native select.
-- `clear()`: clear selected options
+## Documentation
+More details on **[ux-select.com](https://ux-select.com/)**.
 
 ## License
 

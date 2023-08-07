@@ -1,6 +1,6 @@
 {
   "name": "ux-select",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
   "keywords": [
     "HTMLSelect",
@@ -20,7 +20,7 @@
   ],
   "type": "module",
   "main": "./src/ux-select.ts",
-  "types": "./src/types.ts",
+  "types": "./src/types.d.ts",
   "scripts": {
     "build": "tsc && vite build && vite build --config vite.config.iife.ts",
     "lint": "eslint --ignore-path .eslintignore .",
@@ -48,5 +48,5 @@
   "bugs": {
     "url": "https://github.com/afonja14755/ux-select/issues"
   },
-  "homepage": "https://github.com/afonja14755/ux-select"
+  "homepage": "https://ux-select.com/"
 }

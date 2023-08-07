@@ -1,14 +1,24 @@
 import "./ux-select.scss";
 
-import { UxSelectConstructorOptions, UxSelectOptionObject } from "./types.ts";
+import { UxSelectConstructorOptions, UxSelectOptionObject } from "./types";
 
 import triggerChange from "./utils/events/triggerChange.ts";
 import triggerInput from "./utils/events/triggerInput.ts";
 
+/**
+ * @name UxSelect
+ * @description Render new component with props
+ * @example
+ * ```js
+ * const selectEl = document.querySelect("select.ux-select");
+ * const uxSelect = new UxSelect(selectEl);
+ * ```
+ */
 export default class UxSelect {
   el: HTMLSelectElement;
   config: {
     isSearchable: boolean;
+    isSearchFocus: boolean;
     isGroupOptions: boolean;
     optionStyle: "checkbox" | "radio" | "default";
     placeholder: string | undefined;
@@ -27,10 +37,23 @@ export default class UxSelect {
   groups: string[];
   #uxEl: Element | undefined;
 
+  /**
+   * @param {HTMLSelectElement} element Select element
+   * @param {Object} [options] Props
+   * @param {Boolean} [options.isSearchable] Set true to add search input
+   * @param {Boolean} [options.isSearchFocus] Set false to remove focus on search input
+   * @param {Boolean} [options.isGroupOption] Set true to add grouping options
+   * @param {(checkbox|radio|default)} [options.optionStyle] Add styles link option(s) it checkbox or radio
+   * @param {String} [options.placeholder] Change placeholder text
+   * @param {String} [options.searchText] Change placeholder text on search input
+   * @param {String} [options.clearText] Change title on x-mark icon
+   * @param {String} [options.selectedText] Change text on multiple select, when user select more than 1 option
+   * */
   constructor(element: HTMLSelectElement, options: UxSelectConstructorOptions) {
     this.el = element;
     this.config = options || {
       isSearchable: false,
+      isSearchFocus: false,
       isGroupOptions: false,
       optionStyle: "default",
     };
@@ -263,6 +286,10 @@ export default class UxSelect {
     }
   }
 
+  /**
+   *
+   * @param {Boolean} [isTriggerChange] Skip triggering "change" event
+   */
   update(isTriggerChange: boolean = true): void {
     this.#extractOptionsData();
     this.#renderGroups();
@@ -313,7 +340,7 @@ export default class UxSelect {
           if (!uxSearch) throw Error("Search input is null");
           uxSearch.value = "";
           uxSearch.dispatchEvent(new Event("input"));
-          uxSearch.focus();
+          if (this.config.isSearchFocus) uxSearch.focus();
         }
       }
     }
