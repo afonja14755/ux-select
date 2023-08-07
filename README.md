@@ -53,6 +53,7 @@ const myUxSelect = new UxSelect(element, options);
 You can customize styles by replace CSS-variables what contain "--uxs" prefix and placed on :root.
 
 ## Documentation
+
 More details on **[ux-select.com](https://ux-select.com/)**.
 
 ## License
