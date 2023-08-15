@@ -17,14 +17,10 @@ import triggerInput from "./utils/events/triggerInput.ts";
 export default class UxSelect {
   el: HTMLSelectElement;
   config: {
+    optionStyle: "checkbox" | "radio" | "default";
+    isGroupOptions: boolean;
     isSearchable: boolean;
     isSearchFocus: boolean;
-    isGroupOptions: boolean;
-    optionStyle: "checkbox" | "radio" | "default";
-    placeholder: string | undefined;
-    searchText: string | undefined;
-    clearText: string | undefined;
-    selectedText: string | undefined;
   };
   localization: {
     placeholder: string;
@@ -51,18 +47,18 @@ export default class UxSelect {
    * */
   constructor(element: HTMLSelectElement, options: UxSelectConstructorOptions) {
     this.el = element;
-    this.config = options || {
-      isSearchable: false,
-      isSearchFocus: false,
-      isGroupOptions: false,
-      optionStyle: "default",
+    this.config = {
+      isSearchable: options.isSearchable || false,
+      isSearchFocus: options.isSearchFocus || false,
+      isGroupOptions: options.isGroupOptions || false,
+      optionStyle: options.optionStyle || "default",
     };
 
     this.localization = {
-      placeholder: this.el.dataset.placeholder || this.config.placeholder || "Select an option",
-      searchText: this.el.dataset.searchText || this.config.searchText || "Search",
-      clearText: this.el.dataset.clearText || this.config.clearText || "Clear option(s)",
-      selectedText: this.el.dataset.selectedText || this.config.selectedText || "Selected:",
+      placeholder: this.el.dataset.placeholder || options.placeholder || "Select an option",
+      searchText: this.el.dataset.searchText || options.searchText || "Search",
+      clearText: this.el.dataset.clearText || options.clearText || "Clear option(s)",
+      selectedText: this.el.dataset.selectedText || options.selectedText || "Selected:",
     };
 
     this.state = {

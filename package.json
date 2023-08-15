@@ -1,10 +1,13 @@
 {
   "name": "ux-select",
-  "version": "1.6.1",
+  "version": "1.6.3",
   "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
   "keywords": [
+    "web",
+    "front-end",
     "HTMLSelect",
     "select",
+    "dropdown",
     "multiple select",
     "disabled select",
     "searchable select",
@@ -48,5 +51,5 @@
   "bugs": {
     "url": "https://github.com/afonja14755/ux-select/issues"
   },
-  "homepage": "https://ux-select.com/"
+  "homepage": "https://ux-select.com"
 }

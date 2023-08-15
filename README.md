@@ -1,6 +1,6 @@
 # UX Select
 
-UX Select — free and lightweight native(vanilla) JavaScript plugin that replace native select elements with customization.
+Free and lightweight native(vanilla) JavaScript plugin that replace native select elements with customization.
 
 ## Status
 
@@ -64,6 +64,6 @@ It can be used **for free** and **without any attribution**, in any personal or 
 
 ## Future additions
 
-- Documentation
+- Images for options and groups
 - Focus events
 - Group sorting
