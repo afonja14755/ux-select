@@ -16,11 +16,12 @@ import triggerInput from "./utils/events/triggerInput.ts";
  */
 export default class UxSelect {
   el: HTMLSelectElement;
+  #options: UxSelectConstructorOptions;
   config: {
-    optionStyle: "checkbox" | "radio" | "default";
-    isGroupOptions: boolean;
     isSearchable: boolean;
     isSearchFocus: boolean;
+    isGroupOptions: boolean;
+    optionStyle: "checkbox" | "radio" | "default";
   };
   localization: {
     placeholder: string;
@@ -47,18 +48,30 @@ export default class UxSelect {
    * */
   constructor(element: HTMLSelectElement, options: UxSelectConstructorOptions) {
     this.el = element;
+
+    this.#options = options || {
+      isSearchable: false,
+      isSearchFocus: false,
+      isGroupOptions: false,
+      optionStyle: "default",
+      placeholder: "Select an option",
+      searchText: "Search",
+      clearText: "Clear option(s)",
+      selectedText: "Selected:",
+    };
+
     this.config = {
-      isSearchable: options.isSearchable || false,
-      isSearchFocus: options.isSearchFocus || false,
-      isGroupOptions: options.isGroupOptions || false,
-      optionStyle: options.optionStyle || "default",
+      isSearchable: this.#options.isSearchable || false,
+      isSearchFocus: this.#options.isSearchFocus || false,
+      isGroupOptions: this.#options.isGroupOptions || false,
+      optionStyle: this.#options.optionStyle || "default",
     };
 
     this.localization = {
-      placeholder: this.el.dataset.placeholder || options.placeholder || "Select an option",
-      searchText: this.el.dataset.searchText || options.searchText || "Search",
-      clearText: this.el.dataset.clearText || options.clearText || "Clear option(s)",
-      selectedText: this.el.dataset.selectedText || options.selectedText || "Selected:",
+      placeholder: this.#options.placeholder || this.el.dataset.placeholder || "Select an option",
+      searchText: this.#options.searchText || this.el.dataset.searchText || "Search",
+      clearText: this.#options.clearText || this.el.dataset.clearText || "Clear option(s)",
+      selectedText: this.#options.selectedText || this.el.dataset.selectedText || "Selected:",
     };
 
     this.state = {
