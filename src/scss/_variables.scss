@@ -1,0 +1,48 @@
+$ux-prefix: --uxs;
+
+// Select
+$ux-padding-x: 0.75rem;
+$ux-padding-y: 0.375rem;
+
+$ux-border-width: 1px;
+$ux-border-style: solid;
+$ux-border-color: rgb(233 233 233);
+$ux-border-radius: 0.375rem;
+$ux-border-hover-color: rgb(189 193 198);
+
+$ux-font-size: 1rem;
+$ux-font-weight: 400;
+$ux-line-height: 1.5;
+
+$ux-background-color: rgb(255 255 255);
+$ux-text-color: rgb(34 34 34);
+
+// Images
+$ux-dropdown-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve'%3E%3Cg%3E%3Cpath d='M12,16c-0.3,0-0.5-0.1-0.7-0.3l-6-6c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l5.3,5.3l5.3-5.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4 l-6,6C12.5,15.9,12.3,16,12,16z'/%3E%3C/g%3E%3C/svg%3E%0A");
+$ux-dropdown-disabled-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve'%3E%3Cg%3E%3Cpath fill='rgb(130 130 130)' d='M12,16c-0.3,0-0.5-0.1-0.7-0.3l-6-6c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l5.3,5.3l5.3-5.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4 l-6,6C12.5,15.9,12.3,16,12,16z'/%3E%3C/g%3E%3C/svg%3E%0A");
+$ux-clear-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve'%3E%3Cg%3E%3Cpath d='M6,19c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l12-12c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-12,12C6.5,18.9,6.3,19,6,19z' /%3E%3Cpath d='M18,19c-0.3,0-0.5-0.1-0.7-0.3l-12-12c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l12,12c0.4,0.4,0.4,1,0,1.4 C18.5,18.9,18.3,19,18,19z'/%3E%3C/g%3E%3C/svg%3E%0A");
+$ux-clear-disabled-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve'%3E%3Cg%3E%3Cpath fill='rgb(130 130 130)' d='M6,19c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l12-12c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-12,12C6.5,18.9,6.3,19,6,19z' /%3E%3Cpath fill='rgb(130 130 130)' d='M18,19c-0.3,0-0.5-0.1-0.7-0.3l-12-12c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l12,12c0.4,0.4,0.4,1,0,1.4 C18.5,18.9,18.3,19,18,19z'/%3E%3C/g%3E%3C/svg%3E%0A");
+
+// Option
+$ux-option-hovered-bg-color: rgb(244 244 244);
+$ux-option-selected-bg-color: rgb(244 244 244);
+$ux-option-disabled-bg-color: rgb(244 244 244);
+
+$ux-option-styled-outline-width: 1px;
+$ux-option-styled-checkbox-outline-radius: 0.25rem;
+$ux-option-styled-border-width: 0.1875rem;
+$ux-option-styled-background-color: rgb(0 224 255);
+
+// Search
+$ux-search-background-color: rgb(255 255 255);
+$ux-search-text-color: rgb(34 34 34);
+$ux-search-placeholder-color: rgb(169 169 169);
+
+// Transition
+$ux-transition-duration: 0.2s;
+$ux-transition-easing: ease-in-out;
+
+// Scrollbar
+$ux-scrollbar-track-color: rgb(189 189 189);
+$ux-scrollbar-thumb-color: rgb(117 117 117);
+$ux-scrollbar-thumb-hover-color: rgb(97 97 97);

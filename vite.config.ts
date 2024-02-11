@@ -1,16 +1,30 @@
-import { resolve } from "path";
-import { defineConfig } from "vite";
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
+
+function resDir(path: string) {
+  return resolve(__dirname, path);
+}
 
 export default defineConfig({
-  plugins: [cssInjectedByJsPlugin()],
+  base: './',
   build: {
-    emptyOutDir: false,
-    target: "es2020",
+    target: 'es2020',
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        extend: true,
+        assetFileNames: (assetInfo) => {
+          return assetInfo.name === 'style.css' ? 'css/ux-select.css' : '[name][extname]';
+        },
+      },
+    },
     lib: {
-      entry: resolve(__dirname, "src/ux-select.ts"),
-      name: "UxSelect",
-      fileName: "ux-select.min",
+      entry: resDir('src/ux-select.ts'),
+      name: 'ux-select',
+      formats: ['es', 'iife'],
+      fileName: (format, entryName) => {
+        return `js/${entryName}.${format}.js`;
+      },
     },
   },
 });

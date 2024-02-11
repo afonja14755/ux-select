@@ -1,297 +1,299 @@
-import "./ux-select.scss";
+import './scss/ux-select.scss';
 
-import { UxSelectConstructorOptions, UxSelectOptionObject } from "./types";
+import { UxSelectParams, UxSelectOptions, UxSelectConfig, UxSelectLocalization, UxSelectState } from './types';
 
-import triggerChange from "./utils/events/triggerChange.ts";
-import triggerInput from "./utils/events/triggerInput.ts";
+import triggerChange from './utils/events/triggerChange.ts';
+import triggerInput from './utils/events/triggerInput.ts';
 
 /**
- * @name UxSelect
- * @description Render new component with props
- * @example
- * ```js
- * const selectEl = document.querySelect("select.ux-select");
- * const uxSelect = new UxSelect(selectEl);
- * ```
+ * @class
+ * @classdesc Creating a custom select element with support for grouping, searching, and other features.
+ * @param {HTMLSelectElement} element - The original HTML <select> element to be transformed.
+ * @param {Partial<UxSelectParams>} [params={}] - Optional parameters for configuring the behavior and appearance of UxSelect.
  */
 export default class UxSelect {
   el: HTMLSelectElement;
-  #options: UxSelectConstructorOptions;
-  config: {
-    isSearchable: boolean;
-    isSearchFocus: boolean;
-    isGroupOptions: boolean;
-    optionStyle: "checkbox" | "radio" | "default";
-  };
-  localization: {
-    placeholder: string;
-    searchText: string;
-    clearText: string;
-    selectedText: string;
-  };
-  state: { multiple: boolean; disabled: boolean };
-  options: UxSelectOptionObject[];
-  groups: string[];
-  #uxEl: Element | undefined;
 
-  /**
-   * @param {HTMLSelectElement} element Select element
-   * @param {Object} [options] Props
-   * @param {Boolean} [options.isSearchable] Set true to add search input
-   * @param {Boolean} [options.isSearchFocus] Set false to remove focus on search input
-   * @param {Boolean} [options.isGroupOption] Set true to add grouping options
-   * @param {(checkbox|radio|default)} [options.optionStyle] Add styles link option(s) it checkbox or radio
-   * @param {String} [options.placeholder] Change placeholder text
-   * @param {String} [options.searchText] Change placeholder text on search input
-   * @param {String} [options.clearText] Change title on x-mark icon
-   * @param {String} [options.selectedText] Change text on multiple select, when user select more than 1 option
-   * */
-  constructor(element: HTMLSelectElement, options: UxSelectConstructorOptions) {
+  config: UxSelectConfig;
+  localization: UxSelectLocalization;
+  state: UxSelectState;
+
+  options: UxSelectOptions[];
+  groups: string[];
+
+  uxEl: Element;
+
+  private uxBody: HTMLDivElement | undefined;
+  private uxSearchInput: HTMLInputElement | undefined;
+  private uxClearButton: HTMLButtonElement | undefined;
+
+  constructor(element: HTMLSelectElement, params: Partial<UxSelectParams> = {}) {
     this.el = element;
 
-    this.#options = options || {
-      isSearchable: false,
-      isSearchFocus: false,
-      isGroupOptions: false,
-      optionStyle: "default",
-      placeholder: "Select an option",
-      searchText: "Search",
-      clearText: "Clear option(s)",
-      selectedText: "Selected:",
-    };
-
     this.config = {
-      isSearchable: this.#options.isSearchable || false,
-      isSearchFocus: this.#options.isSearchFocus || false,
-      isGroupOptions: this.#options.isGroupOptions || false,
-      optionStyle: this.#options.optionStyle || "default",
+      isSearchable: params.isSearchable ?? false,
+      isSearchFocus: params.isSearchFocus ?? false,
+      isGroupOptions: params.isGroupOptions ?? false,
+      optionStyle: params.optionStyle ?? 'default',
+      closeButton: params.closeButton ?? true,
     };
-
     this.localization = {
-      placeholder: this.#options.placeholder || this.el.dataset.placeholder || "Select an option",
-      searchText: this.#options.searchText || this.el.dataset.searchText || "Search",
-      clearText: this.#options.clearText || this.el.dataset.clearText || "Clear option(s)",
-      selectedText: this.#options.selectedText || this.el.dataset.selectedText || "Selected:",
+      placeholder: this.el.dataset.placeholder ?? params.placeholder ?? 'Select an option',
+      searchText: this.el.dataset.searchText ?? params.searchText ?? 'Search',
+      clearText: this.el.dataset.clearText ?? params.clearText ?? 'Clear option(s)',
+      selectedText: this.el.dataset.selectedText ?? params.selectedText ?? 'Selected:',
     };
-
     this.state = {
       multiple: this.el.multiple,
       disabled: this.el.disabled,
     };
 
-    this.options = [];
-    this.groups = [];
+    this.options = this.extractOptions();
+    this.groups = this.extractGroups();
 
-    this.#uxEl = undefined;
+    this.uxEl = this.create();
 
-    this.#init();
+    this.setSelectState();
+    this.bindEvents();
   }
 
-  #init(): void {
-    this.#extractOptionsData();
-    this.#renderSelect();
-    this.#bindEvents();
-  }
-
-  #extractOptionsData(): void {
+  private extractOptions(isUpdate = false): UxSelectOptions[] {
     const options: HTMLOptionsCollection = this.el.options;
-    if (options.length <= 0) throw Error(`Null options at ${this.el}`);
-    this.options = [];
+    const isGroupingEnabled = this.config.isGroupOptions;
+    const optionsData: UxSelectOptions[] = [];
 
     for (const option of options) {
-      let group: string;
-      if (this.config.isGroupOptions) {
-        group = option.dataset.uxSelectGroup ? option.dataset.uxSelectGroup : "empty";
-      } else {
-        group = "empty";
+      if (option.value === '') continue;
+
+      let group = 'empty';
+      if (isGroupingEnabled && option.dataset.uxSelectGroup) {
+        group = option.dataset.uxSelectGroup;
       }
 
-      if (this.groups.indexOf(group) === -1) this.groups.push(group);
+      let uxOption = undefined;
+      if (isUpdate) {
+        uxOption = this.uxEl.querySelector(`.ux-select-group__elem[data-value='${option.value}']`);
+      }
 
-      this.options.push({
+      optionsData.push(<UxSelectOptions>{
         attributes: {
-          selected: option.getAttribute("selected") !== null,
+          selected: option.selected,
           disabled: option.disabled,
           group,
         },
         data: {
-          text: option.textContent || "",
+          text: option.textContent ? option.textContent.trim() : '',
           value: option.value,
         },
         element: option,
+        uxOption,
       });
     }
+
+    return optionsData;
   }
 
-  #setSelectState(values: string[] = []): void {
-    if (this.#uxEl) {
-      const selectTitle = this.#uxEl.querySelector(".ux-select__title");
-      if (!selectTitle) throw Error("selectTitle is null");
-      if (values.length === 1) {
-        selectTitle.textContent = values[0];
-        this.#uxEl.classList.add("-filled");
-      } else if (values.length > 0 && this.state.multiple) {
-        selectTitle.textContent = `${this.localization.selectedText} ${values.length}`;
-        this.#uxEl.classList.add("-filled");
-      } else {
-        selectTitle.textContent = this.localization.placeholder;
-        this.#uxEl.classList.remove("-filled");
+  private extractGroups(): string[] {
+    const options: HTMLOptionsCollection = this.el.options;
+    const isGroupingEnabled = this.config.isGroupOptions;
+    const uniqueGroups = new Set<string>();
+
+    for (const option of options) {
+      if (option.value === '') continue;
+
+      let group = 'empty';
+      if (isGroupingEnabled && option.dataset.uxSelectGroup) {
+        group = option.dataset.uxSelectGroup;
+      }
+      uniqueGroups.add(group);
+    }
+
+    return Array.from(uniqueGroups);
+  }
+
+  private setSelectState(): void {
+    const selectTitle = this.uxEl.querySelector('.ux-select__title') as Element;
+
+    const selectedTexts = this.options.reduce<string[]>((acc, item) => {
+      if (item.attributes.selected) acc.push(item.data.text);
+      return acc;
+    }, []);
+
+    if (selectedTexts.length > 0) {
+      if (selectedTexts.length === 1) {
+        selectTitle.textContent = selectedTexts[0];
+      } else if (this.state.multiple) {
+        selectTitle.textContent = `${this.localization.selectedText} ${selectedTexts.length}`;
+      }
+      this.uxEl.classList.add('-filled');
+    } else {
+      selectTitle.textContent = this.localization.placeholder;
+      this.uxEl.classList.remove('-filled');
+    }
+
+    if (this.config.isGroupOptions) {
+      for (const group of this.groups) {
+        const htmlGroup = this.uxEl.querySelector(`[data-ux-group="${group}"]`);
+        if (!htmlGroup) continue;
+
+        const groupList = htmlGroup.querySelector('.ux-select-group__list');
+        if (!groupList) continue;
+
+        const groupElements = Array.from(groupList.querySelectorAll('.ux-select-group__elem'));
+        const isAllDisabled = groupElements.every((elem) => {
+          elem.classList.contains('-disabled');
+        });
+        htmlGroup.classList.toggle('-disabled', isAllDisabled);
       }
     }
   }
 
-  #renderOptions(): void {
-    new Promise(resolve => {
-      const selectedValues: string[] = [];
+  private createGroupElement(group: string): HTMLElement {
+    const selectGroup = document.createElement('div');
+    selectGroup.classList.add('ux-select__group', 'ux-select-group');
+    selectGroup.dataset.uxGroup = group;
 
-      this.options.forEach(option => {
-        const selectListElem = document.createElement("li");
-        selectListElem.classList.add("ux-select-group__elem");
-        selectListElem.dataset.value = option.data.value;
-        selectListElem.textContent = option.data.text;
-        if (option.attributes.selected) {
-          selectListElem.classList.add("-selected");
-          selectedValues.push(option.data.text !== null ? option.data.text : "");
-        }
-        if (option.attributes.disabled) selectListElem.classList.add("-disabled");
+    if (group === 'empty') {
+      selectGroup.classList.add('-empty');
+    } else {
+      const selectGroupTitle = document.createElement('div');
+      selectGroupTitle.classList.add('ux-select-group__title');
+      selectGroupTitle.textContent = group;
+      selectGroup.appendChild(selectGroupTitle);
+    }
 
-        selectListElem.addEventListener("click", this.#onClickOption.bind(this));
+    const selectGroupList = document.createElement('ul');
+    selectGroupList.classList.add('ux-select-group__list');
+    selectGroup.appendChild(selectGroupList);
 
-        if (this.#uxEl) {
-          const selectGroupList: HTMLElement | null = this.#uxEl.querySelector(
-            `[data-ux-group="${option.attributes.group}"] .ux-select-group__list`,
-          );
-          if (selectGroupList) selectGroupList.appendChild(selectListElem);
-        }
-      });
-
-      this.#setSelectState(selectedValues);
-
-      this.config.isGroupOptions ? resolve(true) : resolve(false);
-    }).then(isGroup => {
-      if (!isGroup) return;
-
-      if (this.#uxEl) {
-        const groups: NodeListOf<HTMLDivElement> = this.#uxEl.querySelectorAll(".ux-select-group");
-        if (groups.length > 0) {
-          groups.forEach((group: HTMLElement) => {
-            const groupList = group.querySelector(".ux-select-group__list");
-            if (groupList) {
-              const groupElements = groupList.querySelectorAll(".ux-select-group__elem"),
-                groupDisabledElements = groupList.querySelectorAll(".ux-select-group__elem.-disabled");
-
-              groupElements.length === groupDisabledElements.length
-                ? group.classList.add("-disabled")
-                : group.classList.remove("-disabled");
-            }
-          });
-        }
-      }
-    });
+    return selectGroup;
   }
 
-  #renderGroups(): void {
-    if (this.#uxEl) {
-      const uxSelectList = this.#uxEl.querySelector(".ux-select__dropdown");
-      if (!uxSelectList) throw Error("uxSelectList is null");
-      uxSelectList.innerHTML = "";
-      this.groups.forEach(group => {
-        const selectGroup = document.createElement("div");
-        selectGroup.classList.add("ux-select__group", "ux-select-group");
-        if (group === "empty") selectGroup.classList.add("-empty");
-        selectGroup.dataset.uxGroup = group;
+  private createGroupAndOptions() {
+    const selectList = document.createElement('div');
+    selectList.classList.add('ux-select__dropdown');
 
-        if (group !== "empty") {
-          const selectGroupTitle = document.createElement("div");
-          selectGroupTitle.classList.add("ux-select-group__title");
-          selectGroupTitle.textContent = group;
+    const groupFragment = document.createDocumentFragment();
+    const optionsFragmentsByGroup: { [key: string]: DocumentFragment } = {};
 
-          selectGroup.appendChild(selectGroupTitle);
-        }
+    for (const group of this.groups) {
+      const selectGroup = this.createGroupElement(group);
+      groupFragment.appendChild(selectGroup);
 
-        const selectGroupList = document.createElement("ul");
-        selectGroupList.classList.add("ux-select-group__list");
+      optionsFragmentsByGroup[group] = document.createDocumentFragment();
+    }
 
-        selectGroup.appendChild(selectGroupList);
-        uxSelectList.appendChild(selectGroup);
-      });
+    selectList.appendChild(groupFragment);
 
-      this.#renderOptions();
+    for (const option of this.options) {
+      const selectListElem = document.createElement('li');
+      selectListElem.classList.add('ux-select-group__elem');
+      selectListElem.dataset.value = option.data.value;
+      selectListElem.textContent = option.data.text;
+
+      if (option.attributes.selected) {
+        selectListElem.classList.add('-selected');
+      }
+
+      if (option.attributes.disabled) {
+        selectListElem.classList.add('-disabled');
+      }
+
+      selectListElem.addEventListener('click', this.onClickOption.bind(this));
+
+      optionsFragmentsByGroup[option.attributes.group].appendChild(selectListElem);
+
+      option.uxOption = selectListElem;
+    }
+
+    for (const group of this.groups) {
+      const fragment = optionsFragmentsByGroup[group];
+      const selectGroupList = selectList.querySelector(`[data-ux-group="${group}"] .ux-select-group__list`);
+
+      if (selectGroupList) selectGroupList.appendChild(fragment);
+    }
+
+    if (!this.uxBody) throw new Error('uxBody is undefined');
+    if (this.uxBody.childNodes[1]) {
+      this.uxBody.replaceChild(selectList, this.uxBody.childNodes[1]);
+    } else {
+      this.uxBody.appendChild(selectList);
     }
   }
 
-  #renderSelect(): void {
-    this.el.style.display = "none";
-
+  private create(): Element {
     /** Create select head */
-    const selectHead = document.createElement("div");
-    selectHead.classList.add("ux-select__head");
+    const selectHead = document.createElement('div');
+    selectHead.classList.add('ux-select__head');
 
-    const selectTitle = document.createElement("div");
-    selectTitle.classList.add("ux-select__title");
+    const selectTitle = document.createElement('div');
+    selectTitle.classList.add('ux-select__title');
     selectTitle.textContent = this.localization.placeholder;
+    selectHead.appendChild(selectTitle);
 
-    const selectClear = document.createElement("button");
-    selectClear.type = "button";
-    selectClear.classList.add("ux-select__clear");
-    selectClear.title = this.localization.clearText;
-
-    selectHead.append(selectTitle, selectClear);
+    if (this.config.closeButton) {
+      const selectClear = document.createElement('button');
+      selectClear.type = 'button';
+      selectClear.classList.add('ux-select__clear');
+      selectClear.title = this.localization.clearText;
+      this.uxClearButton = selectClear;
+      selectHead.appendChild(selectClear);
+    }
 
     /** Create body */
-    const selectBody = document.createElement("div");
-    selectBody.classList.add("ux-select__body");
+    const selectBody = document.createElement('div');
+    selectBody.classList.add('ux-select__body');
+    this.uxBody = selectBody;
 
     if (this.config.isSearchable) {
-      const selectSearchWrap = document.createElement("div");
-      selectSearchWrap.classList.add("ux-select__search");
+      const selectSearchWrap = document.createElement('div');
+      selectSearchWrap.classList.add('ux-select__search');
 
-      const selectSearch = document.createElement("input");
-      selectSearch.type = "search";
-      selectSearch.classList.add("ux-select-search__input");
+      const selectSearch = document.createElement('input');
+      selectSearch.type = 'search';
+      selectSearch.classList.add('ux-select-search__input');
       selectSearch.placeholder = this.localization.searchText;
+      this.uxSearchInput = selectSearch;
 
       selectSearchWrap.appendChild(selectSearch);
       selectBody.appendChild(selectSearchWrap);
     }
 
-    const selectList = document.createElement("div");
-    selectList.classList.add("ux-select__dropdown");
-
-    selectBody.appendChild(selectList);
+    this.createGroupAndOptions();
 
     /** Create select element */
-    const select = document.createElement("div");
+    const select = document.createElement('div');
 
-    /* Create class list for select element */
-    const classes = ["ux-select", this.el.classList];
-    if (this.state.multiple) classes.push("-multiple");
-    if (this.state.disabled) classes.push("-disabled");
-    if (this.config.optionStyle !== "default") classes.push(`-${this.config.optionStyle}`);
-    select.className = classes.join(" ");
+    /** Create class list for select element */
+    const classes = ['ux-select', this.el.classList];
+    if (this.state.multiple) classes.push('-multiple');
+    if (this.state.disabled) classes.push('-disabled');
+    if (this.config.optionStyle !== 'default') {
+      classes.push(`-${this.config.optionStyle}`);
+    }
+    select.className = classes.join(' ');
 
     select.append(selectHead, selectBody);
-    /** Append UX select */
-    this.el.insertAdjacentElement("afterend", select);
 
-    if (this.el.nextElementSibling) this.#uxEl = this.el.nextElementSibling;
+    this.el.style.display = 'none';
+    this.el.insertAdjacentElement('afterend', select);
 
-    this.#renderGroups();
-  }
-
-  disable(): void {
-    if (!this.state.disabled && this.#uxEl) {
-      this.el.disabled = true;
-      this.#uxEl.classList.add("-disabled");
-      this.state.disabled = true;
-    }
+    return this.el.nextElementSibling as Element;
   }
 
   enable(): void {
-    if (this.state.disabled && this.#uxEl) {
+    if (this.state.disabled) {
       this.el.disabled = false;
-      this.#uxEl.classList.remove("-disabled");
+      this.uxEl.classList.remove('-disabled');
       this.state.disabled = false;
+    }
+  }
+
+  disable(): void {
+    if (!this.state.disabled) {
+      this.el.disabled = true;
+      this.uxEl.classList.add('-disabled');
+      this.state.disabled = true;
     }
   }
 
@@ -300,8 +302,16 @@ export default class UxSelect {
    * @param {Boolean} [isTriggerChange] Skip triggering "change" event
    */
   update(isTriggerChange: boolean = true): void {
-    this.#extractOptionsData();
-    this.#renderGroups();
+    const originalOptions = JSON.stringify(this.options);
+
+    this.options = this.extractOptions(true);
+    this.groups = this.extractGroups();
+
+    if (originalOptions !== JSON.stringify(this.options)) {
+      this.createGroupAndOptions();
+    }
+
+    this.setSelectState();
 
     this.el.disabled ? this.disable() : this.enable();
 
@@ -309,150 +319,151 @@ export default class UxSelect {
   }
 
   clear(): void {
-    this.options.forEach(option => {
-      if (option.attributes.selected && this.#uxEl) {
-        option.attributes.selected = false;
+    for (const option of this.options) {
+      if (!option.attributes.selected) continue;
 
-        const uxOption = this.#uxEl.querySelector(`[data-value="${option.data.value}"]`);
-        if (uxOption) uxOption.classList.remove("-selected");
-        option.element.removeAttribute("selected");
-      }
-    });
-    this.#setSelectState();
+      option.attributes.selected = false;
+      option.element.selected = false;
+      if (option.uxOption) option.uxOption.classList.remove('-selected');
+    }
+
+    this.setSelectState();
 
     triggerChange(this.el);
   }
 
   destroy(): void {
-    if (this.#uxEl) {
-      this.#uxEl.remove();
-      this.el.style.display = "";
-    }
+    this.uxEl.remove();
+    this.el.style.display = '';
   }
 
-  #onToggleShown(e: Event): void {
+  private onToggleShown(e: Event): void {
     e.preventDefault();
     const targetEl = e.target as HTMLElement;
 
     if (this.state.disabled) return;
-    if (!this.#uxEl) throw Error("uxEl is null");
+    if (this.uxClearButton && e.target === this.uxClearButton) return;
+    if (this.uxBody && this.uxBody.contains(targetEl)) return;
 
-    const uxSelectBody = this.#uxEl.querySelector(".ux-select__body");
-    if (!uxSelectBody) throw Error("uxSelectBody is null");
-    if (e.target !== this.#uxEl.querySelector(".ux-select__clear") && !uxSelectBody.contains(targetEl)) {
-      if (this.#uxEl.classList.contains("-shown")) {
-        this.#uxEl.classList.remove("-shown");
-      } else {
-        this.#uxEl.classList.add("-shown");
-        if (this.config.isSearchable) {
-          const uxSearch: HTMLInputElement | null = this.#uxEl.querySelector(".ux-select-search__input");
-          if (!uxSearch) throw Error("Search input is null");
-          uxSearch.value = "";
-          uxSearch.dispatchEvent(new Event("input"));
-          if (this.config.isSearchFocus) uxSearch.focus();
-        }
-      }
+    if (this.uxEl.classList.contains('-shown')) {
+      this.uxEl.classList.remove('-shown');
+      return;
+    }
+
+    this.uxEl.classList.add('-shown');
+    if (this.config.isSearchable && this.uxSearchInput) {
+      this.uxSearchInput.value = '';
+      this.uxSearchInput.dispatchEvent(new Event('input'));
+      if (this.config.isSearchFocus) this.uxSearchInput.focus();
     }
   }
 
-  #onClickOutside(e: Event): void {
+  private onClickOutside(e: Event): void {
     const targetEl = e.target as HTMLElement;
-    if (!this.#uxEl) throw Error("uxEl is null");
-    if (!this.#uxEl.contains(targetEl)) this.#uxEl.classList.remove("-shown");
+    if (!this.uxEl.contains(targetEl)) {
+      this.uxEl.classList.remove('-shown');
+    }
   }
 
-  #onClickClear(e: Event): boolean | void {
+  private onClickClear(e: Event): void {
     e.preventDefault();
 
-    if (this.state.disabled) return false;
+    if (this.state.disabled) return;
 
     return this.clear();
   }
 
-  #onClickOption(e: Event): boolean | void {
+  private onClickOption(e: Event): void {
     e.preventDefault();
 
-    if (e.target !== null) {
-      const option = e.target as HTMLElement;
-      if (option.classList.contains("-disabled")) return false;
+    const uxOption = e.target as HTMLElement;
+    if (uxOption.classList.contains('-disabled')) return;
+    if (!this.state.multiple && uxOption.classList.contains('-selected')) {
+      return;
+    }
 
-      if (this.state.multiple) {
-        e.stopPropagation();
+    if (this.state.multiple) {
+      e.stopPropagation();
 
-        const currentOption: Element | null = this.el.querySelector(`[value="${option.dataset.value}"]`);
-        if (!currentOption) throw Error("Option equal this value not found");
+      const matchingOption = this.options.find((option) => {
+        return option.uxOption === uxOption;
+      });
 
-        option.classList.contains("-selected")
-          ? currentOption.removeAttribute("selected")
-          : currentOption.setAttribute("selected", "");
-      } else {
-        if (!option.classList.contains("-selected")) {
-          this.el.querySelectorAll("option").forEach(optionEl => {
-            optionEl.value === option.dataset.value
-              ? optionEl.setAttribute("selected", "")
-              : optionEl.removeAttribute("selected");
-          });
-        } else {
-          return false;
+      if (matchingOption && matchingOption.uxOption) {
+        matchingOption.attributes.selected = !matchingOption.attributes.selected;
+        matchingOption.element.selected = matchingOption.attributes.selected;
+
+        matchingOption.uxOption.classList.toggle('-selected');
+      }
+    } else {
+      for (const option of this.options) {
+        const isSelected = option.uxOption === uxOption;
+        option.attributes.selected = isSelected;
+        option.element.selected = isSelected;
+
+        if (option.uxOption) {
+          option.uxOption.classList.toggle('-selected', isSelected);
         }
       }
-      return this.update();
     }
+
+    return this.update();
   }
 
-  #onSearch(e: Event): void {
-    if (e.target !== null && this.#uxEl) {
-      const input = e.target as HTMLInputElement,
-        text = input.value.toLowerCase(),
-        groups: NodeListOf<HTMLDivElement> = this.#uxEl.querySelectorAll(".ux-select-group");
+  private onSearch(e: Event): void {
+    if (e.target === null) return;
 
-      if (text === "") {
-        const options: NodeListOf<HTMLDivElement> = this.#uxEl.querySelectorAll(".ux-select-group__elem");
+    const input = e.target as HTMLInputElement;
+    const text = input.value.toLowerCase();
+    const escapedText = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const groups: NodeListOf<HTMLElement> = this.uxEl.querySelectorAll('.ux-select-group');
 
-        options.forEach((option: HTMLElement) => (option.style.display = ""));
-        if (this.config.isGroupOptions) {
-          groups.forEach((group: HTMLElement) => (group.style.display = ""));
+    if (text === '') {
+      for (const option of this.options) {
+        if (option.uxOption) option.uxOption.style.display = '';
+      }
+
+      if (this.config.isGroupOptions) {
+        for (const group of groups) {
+          group.style.display = '';
         }
-      } else {
-        const searchValue = new RegExp(text);
-
-        new Promise(resolve => {
-          this.options.forEach(option => {
-            if (!this.#uxEl) throw Error("uxEl is null");
-            const match = searchValue.test(option.data.text.toLowerCase()),
-              uxOption: HTMLDivElement | null = this.#uxEl.querySelector(`[data-value="${option.data.value}"]`);
-
-            if (!uxOption) throw Error("uxOption is null");
-            uxOption.style.display = match ? "" : "none";
-          });
-          this.config.isGroupOptions ? resolve(true) : resolve(false);
-        }).then(res => {
-          if (!res) return;
-          groups.forEach((group: HTMLElement) => {
-            const groupList = group.querySelector(".ux-select-group__list");
-            group.style.display = "";
-            if (groupList) group.style.display = groupList.clientHeight !== 0 ? "" : "none";
-          });
-        });
       }
 
-      triggerInput(this.el);
+      return;
     }
+
+    const searchValue = new RegExp(escapedText);
+
+    for (const option of this.options) {
+      const match = searchValue.test(option.data.text.toLowerCase());
+      if (option.uxOption) option.uxOption.style.display = match ? '' : 'none';
+    }
+
+    if (this.config.isGroupOptions) {
+      for (const group of groups) {
+        group.style.display = '';
+
+        const groupList = group.querySelector('.ux-select-group__list');
+        if (groupList) {
+          group.style.display = groupList.clientHeight !== 0 ? '' : 'none';
+        }
+      }
+    }
+
+    triggerInput(this.el);
   }
 
-  #bindEvents(): void {
-    if (this.#uxEl) {
-      this.#uxEl.addEventListener("click", this.#onToggleShown.bind(this));
+  private bindEvents(): void {
+    this.uxEl.addEventListener('click', this.onToggleShown.bind(this));
 
-      const clearBtn = this.#uxEl.querySelector(".ux-select__clear");
-      if (clearBtn) clearBtn.addEventListener("click", this.#onClickClear.bind(this));
+    if (this.uxClearButton) {
+      this.uxClearButton.addEventListener('click', this.onClickClear.bind(this));
+    }
 
-      window.addEventListener("click", this.#onClickOutside.bind(this));
+    window.addEventListener('click', this.onClickOutside.bind(this));
 
-      if (this.config.isSearchable) {
-        const searchInput = this.#uxEl.querySelector(".ux-select-search__input");
-        if (searchInput) searchInput.addEventListener("input", this.#onSearch.bind(this));
-      }
+    if (this.config.isSearchable && this.uxSearchInput) {
+      this.uxSearchInput.addEventListener('input', this.onSearch.bind(this));
     }
   }
 }

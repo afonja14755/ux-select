@@ -2,8 +2,13 @@
   "printWidth": 120,
   "tabWidth": 2,
   "useTabs": false,
-  "singleQuote": false,
-  "arrowParens": "avoid",
-  "endOfLine": "lf",
-  "quoteProps": "as-needed"
+  "semi": true,
+  "singleQuote": true,
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": true,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "arrowParens": "always",
+  "endOfLine": "lf"
 }
