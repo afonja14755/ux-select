@@ -204,31 +204,13 @@
   }
 
   &__dropdown {
+    @include scroll;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     max-height: calc(
       ((var(#{$ux-prefix}-font-size) * var(#{$ux-prefix}-line-height)) + (var(#{$ux-prefix}-padding-y) * 2)) * 5
     );
-    overflow-y: auto;
-
-    scroll-behavior: smooth;
-    scrollbar-width: thin;
-    scrollbar-color: var(#{$ux-prefix}-scrollbar-track-color) var(#{$ux-prefix}-scrollbar-thumb-color);
-
-    &::-webkit-scrollbar {
-      position: absolute;
-      width: 0.4375rem;
-      height: 0.4375rem;
-
-      &-track {
-        background-color: var(#{$ux-prefix}-scrollbar-track-color);
-      }
-
-      &-thumb {
-        background-color: var(#{$ux-prefix}-scrollbar-thumb-color);
-        &:hover {
-          background-color: var(#{$ux-prefix}-scrollbar-thumb-hover-color);
-        }
-      }
-    }
   }
 
   &-group {
@@ -295,6 +277,13 @@
         &:after {
           border-radius: var(#{$ux-prefix}-option-styled-checkbox-outline-radius);
         }
+      }
+
+      #{$ux}.-image & {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 0.5rem;
       }
 
       &.-disabled {

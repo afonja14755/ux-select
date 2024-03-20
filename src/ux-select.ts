@@ -27,13 +27,15 @@ export default class UxSelect {
   private uxSearchInput: HTMLInputElement | undefined;
   private uxClearButton: HTMLButtonElement | undefined;
 
-  constructor(element: HTMLSelectElement, params: Partial<UxSelectParams> = {}) {
+  constructor(element: HTMLSelectElement, params: UxSelectParams = {}) {
     this.el = element;
 
     this.config = {
       isSearchable: params.isSearchable ?? false,
       isSearchFocus: params.isSearchFocus ?? false,
       isGroupOptions: params.isGroupOptions ?? false,
+      hideOnClear: params.hideOnClear ?? true,
+      hideOnSelect: params.hideOnSelect ?? false,
       optionStyle: params.optionStyle ?? 'default',
       closeButton: params.closeButton ?? true,
     };
@@ -75,6 +77,17 @@ export default class UxSelect {
         uxOption = this.uxEl.querySelector(`.ux-select-group__elem[data-value='${option.value}']`);
       }
 
+      let optionImage = undefined;
+      if (this.config.optionStyle === 'image' && option.dataset.imageSrc) {
+        optionImage = {
+          src: option.dataset.imageSrc,
+          srcset: option.dataset.imageSrcset ?? undefined,
+          alt: option.dataset.imageAlt ?? '',
+          width: option.dataset.imageWidth ? Number(option.dataset.imageWidth) : 24,
+          height: option.dataset.imageHeight ? Number(option.dataset.imageHeight) : 24,
+        };
+      }
+
       optionsData.push(<UxSelectOptions>{
         attributes: {
           selected: option.selected,
@@ -85,6 +98,7 @@ export default class UxSelect {
           text: option.textContent ? option.textContent.trim() : '',
           value: option.value,
         },
+        image: optionImage,
         element: option,
         uxOption,
       });
@@ -197,6 +211,21 @@ export default class UxSelect {
 
       if (option.attributes.disabled) {
         selectListElem.classList.add('-disabled');
+      }
+
+      if (this.config.optionStyle === 'image' && option.image) {
+        const optionImageElem = document.createElement('img');
+        optionImageElem.classList.add('ux-select-group-elem__image');
+        optionImageElem.src = option.image.src;
+        optionImageElem.width = option.image.width;
+        optionImageElem.height = option.image.height;
+        optionImageElem.alt = option.image.alt;
+
+        if (option.image.srcset) {
+          optionImageElem.srcset = `${option.image.src} 1x, ${option.image.srcset} 2x`;
+        }
+
+        selectListElem.appendChild(optionImageElem);
       }
 
       selectListElem.addEventListener('click', this.onClickOption.bind(this));
@@ -370,6 +399,8 @@ export default class UxSelect {
 
     if (this.state.disabled) return;
 
+    if (this.config.hideOnClear) this.uxEl.classList.remove('-shown');
+
     return this.clear();
   }
 
@@ -406,6 +437,8 @@ export default class UxSelect {
         }
       }
     }
+
+    if (this.config.hideOnSelect) this.uxEl.classList.remove('-shown');
 
     return this.update();
   }

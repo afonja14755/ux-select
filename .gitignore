@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 *.local
+*.tgz
 
 # Editor directories and files
 .vscode/*

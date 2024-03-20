@@ -1,16 +1,18 @@
-export interface UxSelectParams {
-  isSearchable: boolean;
-  isSearchFocus: boolean;
-  isGroupOptions: boolean;
-  optionStyle: 'checkbox' | 'radio' | 'default';
-  closeButton: boolean;
-  placeholder: string;
-  searchText: string;
-  clearText: string;
-  selectedText: string;
-}
+export type UxSelectParams = {
+  isSearchable?: boolean;
+  isSearchFocus?: boolean;
+  isGroupOptions?: boolean;
+  hideOnClear?: boolean;
+  hideOnSelect?: boolean;
+  optionStyle?: 'checkbox' | 'radio' | 'image' | 'default';
+  closeButton?: boolean;
+  placeholder?: string;
+  searchText?: string;
+  clearText?: string;
+  selectedText?: string;
+};
 
-export interface UxSelectOptions {
+export type UxSelectOptions = {
   attributes: {
     selected: boolean;
     disabled: boolean;
@@ -20,26 +22,25 @@ export interface UxSelectOptions {
     text: string;
     value: string;
   };
+  image?: {
+    src: string;
+    srcset: string | undefined;
+    alt: string;
+    width: number;
+    height: number;
+  };
   element: HTMLOptionElement;
   uxOption: HTMLLIElement | undefined;
-}
+};
 
-export interface UxSelectConfig {
-  isSearchable: boolean;
-  isSearchFocus: boolean;
-  isGroupOptions: boolean;
-  optionStyle: 'checkbox' | 'radio' | 'default';
-  closeButton: boolean;
-}
+export type UxSelectConfig = Pick<
+  UxSelectParams,
+  'isSearchable' | 'isSearchFocus' | 'isGroupOptions' | 'hideOnClear' | 'hideOnSelect' | 'optionStyle' | 'closeButton'
+>;
 
-export interface UxSelectLocalization {
-  placeholder: string;
-  searchText: string;
-  clearText: string;
-  selectedText: string;
-}
+export type UxSelectLocalization = Pick<UxSelectParams, 'placeholder', 'searchText', 'clearText', 'selectedText'>;
 
-export interface UxSelectState {
+export type UxSelectState = {
   multiple: boolean;
   disabled: boolean;
-}
+};
