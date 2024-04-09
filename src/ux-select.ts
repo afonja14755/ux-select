@@ -243,8 +243,10 @@ export default class UxSelect {
     }
 
     if (!this.uxBody) throw new Error('uxBody is undefined');
-    if (this.uxBody.childNodes[1]) {
-      this.uxBody.replaceChild(selectList, this.uxBody.childNodes[1]);
+
+    const replacementChildIndex = this.config.isSearchable ? 1 : 0;
+    if (this.uxBody.childNodes[replacementChildIndex]) {
+      this.uxBody.replaceChild(selectList, this.uxBody.childNodes[replacementChildIndex]);
     } else {
       this.uxBody.appendChild(selectList);
     }

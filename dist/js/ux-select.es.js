@@ -1,6 +1,6 @@
 var d = Object.defineProperty;
-var h = (c, t, e) => t in c ? d(c, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : c[t] = e;
-var a = (c, t, e) => (h(c, typeof t != "symbol" ? t + "" : t, e), e);
+var h = (c, t, s) => t in c ? d(c, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : c[t] = s;
+var a = (c, t, s) => (h(c, typeof t != "symbol" ? t + "" : t, s), s);
 function u(c) {
   const t = new Event("change");
   c.dispatchEvent(t);
@@ -10,7 +10,7 @@ function p(c) {
   c.dispatchEvent(t);
 }
 class x {
-  constructor(t, e = {}) {
+  constructor(t, s = {}) {
     a(this, "el");
     a(this, "config");
     a(this, "localization");
@@ -22,136 +22,137 @@ class x {
     a(this, "uxSearchInput");
     a(this, "uxClearButton");
     this.el = t, this.config = {
-      isSearchable: e.isSearchable ?? !1,
-      isSearchFocus: e.isSearchFocus ?? !1,
-      isGroupOptions: e.isGroupOptions ?? !1,
-      hideOnClear: e.hideOnClear ?? !0,
-      hideOnSelect: e.hideOnSelect ?? !1,
-      optionStyle: e.optionStyle ?? "default",
-      closeButton: e.closeButton ?? !0
+      isSearchable: s.isSearchable ?? !1,
+      isSearchFocus: s.isSearchFocus ?? !1,
+      isGroupOptions: s.isGroupOptions ?? !1,
+      hideOnClear: s.hideOnClear ?? !0,
+      hideOnSelect: s.hideOnSelect ?? !1,
+      optionStyle: s.optionStyle ?? "default",
+      closeButton: s.closeButton ?? !0
     }, this.localization = {
-      placeholder: this.el.dataset.placeholder ?? e.placeholder ?? "Select an option",
-      searchText: this.el.dataset.searchText ?? e.searchText ?? "Search",
-      clearText: this.el.dataset.clearText ?? e.clearText ?? "Clear option(s)",
-      selectedText: this.el.dataset.selectedText ?? e.selectedText ?? "Selected:"
+      placeholder: this.el.dataset.placeholder ?? s.placeholder ?? "Select an option",
+      searchText: this.el.dataset.searchText ?? s.searchText ?? "Search",
+      clearText: this.el.dataset.clearText ?? s.clearText ?? "Clear option(s)",
+      selectedText: this.el.dataset.selectedText ?? s.selectedText ?? "Selected:"
     }, this.state = {
       multiple: this.el.multiple,
       disabled: this.el.disabled
     }, this.options = this.extractOptions(), this.groups = this.extractGroups(), this.uxEl = this.create(), this.setSelectState(), this.bindEvents();
   }
   extractOptions(t = !1) {
-    const e = this.el.options, o = this.config.isGroupOptions, s = [];
-    for (const i of e) {
-      if (i.value === "")
+    const s = this.el.options, i = this.config.isGroupOptions, l = [];
+    for (const e of s) {
+      if (e.value === "")
         continue;
-      let l = "empty";
-      o && i.dataset.uxSelectGroup && (l = i.dataset.uxSelectGroup);
-      let n;
-      t && (n = this.uxEl.querySelector(`.ux-select-group__elem[data-value='${i.value}']`));
+      let n = "empty";
+      i && e.dataset.uxSelectGroup && (n = e.dataset.uxSelectGroup);
+      let o;
+      t && (o = this.uxEl.querySelector(`.ux-select-group__elem[data-value='${e.value}']`));
       let r;
-      this.config.optionStyle === "image" && i.dataset.imageSrc && (r = {
-        src: i.dataset.imageSrc,
-        srcset: i.dataset.imageSrcset ?? void 0,
-        alt: i.dataset.imageAlt ?? "",
-        width: i.dataset.imageWidth ? Number(i.dataset.imageWidth) : 24,
-        height: i.dataset.imageHeight ? Number(i.dataset.imageHeight) : 24
-      }), s.push({
+      this.config.optionStyle === "image" && e.dataset.imageSrc && (r = {
+        src: e.dataset.imageSrc,
+        srcset: e.dataset.imageSrcset ?? void 0,
+        alt: e.dataset.imageAlt ?? "",
+        width: e.dataset.imageWidth ? Number(e.dataset.imageWidth) : 24,
+        height: e.dataset.imageHeight ? Number(e.dataset.imageHeight) : 24
+      }), l.push({
         attributes: {
-          selected: i.selected,
-          disabled: i.disabled,
-          group: l
+          selected: e.selected,
+          disabled: e.disabled,
+          group: n
         },
         data: {
-          text: i.textContent ? i.textContent.trim() : "",
-          value: i.value
+          text: e.textContent ? e.textContent.trim() : "",
+          value: e.value
         },
         image: r,
-        element: i,
-        uxOption: n
+        element: e,
+        uxOption: o
       });
     }
-    return s;
+    return l;
   }
   extractGroups() {
-    const t = this.el.options, e = this.config.isGroupOptions, o = /* @__PURE__ */ new Set();
-    for (const s of t) {
-      if (s.value === "")
+    const t = this.el.options, s = this.config.isGroupOptions, i = /* @__PURE__ */ new Set();
+    for (const l of t) {
+      if (l.value === "")
         continue;
-      let i = "empty";
-      e && s.dataset.uxSelectGroup && (i = s.dataset.uxSelectGroup), o.add(i);
+      let e = "empty";
+      s && l.dataset.uxSelectGroup && (e = l.dataset.uxSelectGroup), i.add(e);
     }
-    return Array.from(o);
+    return Array.from(i);
   }
   setSelectState() {
-    const t = this.uxEl.querySelector(".ux-select__title"), e = this.options.reduce((o, s) => (s.attributes.selected && o.push(s.data.text), o), []);
-    if (e.length > 0 ? (e.length === 1 ? t.textContent = e[0] : this.state.multiple && (t.textContent = `${this.localization.selectedText} ${e.length}`), this.uxEl.classList.add("-filled")) : (t.textContent = this.localization.placeholder, this.uxEl.classList.remove("-filled")), this.config.isGroupOptions)
-      for (const o of this.groups) {
-        const s = this.uxEl.querySelector(`[data-ux-group="${o}"]`);
-        if (!s)
+    const t = this.uxEl.querySelector(".ux-select__title"), s = this.options.reduce((i, l) => (l.attributes.selected && i.push(l.data.text), i), []);
+    if (s.length > 0 ? (s.length === 1 ? t.textContent = s[0] : this.state.multiple && (t.textContent = `${this.localization.selectedText} ${s.length}`), this.uxEl.classList.add("-filled")) : (t.textContent = this.localization.placeholder, this.uxEl.classList.remove("-filled")), this.config.isGroupOptions)
+      for (const i of this.groups) {
+        const l = this.uxEl.querySelector(`[data-ux-group="${i}"]`);
+        if (!l)
           continue;
-        const i = s.querySelector(".ux-select-group__list");
-        if (!i)
+        const e = l.querySelector(".ux-select-group__list");
+        if (!e)
           continue;
-        const n = Array.from(i.querySelectorAll(".ux-select-group__elem")).every((r) => {
+        const o = Array.from(e.querySelectorAll(".ux-select-group__elem")).every((r) => {
           r.classList.contains("-disabled");
         });
-        s.classList.toggle("-disabled", n);
+        l.classList.toggle("-disabled", o);
       }
   }
   createGroupElement(t) {
-    const e = document.createElement("div");
-    if (e.classList.add("ux-select__group", "ux-select-group"), e.dataset.uxGroup = t, t === "empty")
-      e.classList.add("-empty");
+    const s = document.createElement("div");
+    if (s.classList.add("ux-select__group", "ux-select-group"), s.dataset.uxGroup = t, t === "empty")
+      s.classList.add("-empty");
     else {
-      const s = document.createElement("div");
-      s.classList.add("ux-select-group__title"), s.textContent = t, e.appendChild(s);
+      const l = document.createElement("div");
+      l.classList.add("ux-select-group__title"), l.textContent = t, s.appendChild(l);
     }
-    const o = document.createElement("ul");
-    return o.classList.add("ux-select-group__list"), e.appendChild(o), e;
+    const i = document.createElement("ul");
+    return i.classList.add("ux-select-group__list"), s.appendChild(i), s;
   }
   createGroupAndOptions() {
     const t = document.createElement("div");
     t.classList.add("ux-select__dropdown");
-    const e = document.createDocumentFragment(), o = {};
-    for (const s of this.groups) {
-      const i = this.createGroupElement(s);
-      e.appendChild(i), o[s] = document.createDocumentFragment();
+    const s = document.createDocumentFragment(), i = {};
+    for (const e of this.groups) {
+      const n = this.createGroupElement(e);
+      s.appendChild(n), i[e] = document.createDocumentFragment();
     }
-    t.appendChild(e);
-    for (const s of this.options) {
-      const i = document.createElement("li");
-      if (i.classList.add("ux-select-group__elem"), i.dataset.value = s.data.value, i.textContent = s.data.text, s.attributes.selected && i.classList.add("-selected"), s.attributes.disabled && i.classList.add("-disabled"), this.config.optionStyle === "image" && s.image) {
-        const l = document.createElement("img");
-        l.classList.add("ux-select-group-elem__image"), l.src = s.image.src, l.width = s.image.width, l.height = s.image.height, l.alt = s.image.alt, s.image.srcset && (l.srcset = `${s.image.src} 1x, ${s.image.srcset} 2x`), i.appendChild(l);
+    t.appendChild(s);
+    for (const e of this.options) {
+      const n = document.createElement("li");
+      if (n.classList.add("ux-select-group__elem"), n.dataset.value = e.data.value, n.textContent = e.data.text, e.attributes.selected && n.classList.add("-selected"), e.attributes.disabled && n.classList.add("-disabled"), this.config.optionStyle === "image" && e.image) {
+        const o = document.createElement("img");
+        o.classList.add("ux-select-group-elem__image"), o.src = e.image.src, o.width = e.image.width, o.height = e.image.height, o.alt = e.image.alt, e.image.srcset && (o.srcset = `${e.image.src} 1x, ${e.image.srcset} 2x`), n.appendChild(o);
       }
-      i.addEventListener("click", this.onClickOption.bind(this)), o[s.attributes.group].appendChild(i), s.uxOption = i;
+      n.addEventListener("click", this.onClickOption.bind(this)), i[e.attributes.group].appendChild(n), e.uxOption = n;
     }
-    for (const s of this.groups) {
-      const i = o[s], l = t.querySelector(`[data-ux-group="${s}"] .ux-select-group__list`);
-      l && l.appendChild(i);
+    for (const e of this.groups) {
+      const n = i[e], o = t.querySelector(`[data-ux-group="${e}"] .ux-select-group__list`);
+      o && o.appendChild(n);
     }
     if (!this.uxBody)
       throw new Error("uxBody is undefined");
-    this.uxBody.childNodes[1] ? this.uxBody.replaceChild(t, this.uxBody.childNodes[1]) : this.uxBody.appendChild(t);
+    const l = this.config.isSearchable ? 1 : 0;
+    this.uxBody.childNodes[l] ? this.uxBody.replaceChild(t, this.uxBody.childNodes[l]) : this.uxBody.appendChild(t);
   }
   create() {
     const t = document.createElement("div");
     t.classList.add("ux-select__head");
-    const e = document.createElement("div");
-    if (e.classList.add("ux-select__title"), e.textContent = this.localization.placeholder, t.appendChild(e), this.config.closeButton) {
-      const l = document.createElement("button");
-      l.type = "button", l.classList.add("ux-select__clear"), l.title = this.localization.clearText, this.uxClearButton = l, t.appendChild(l);
+    const s = document.createElement("div");
+    if (s.classList.add("ux-select__title"), s.textContent = this.localization.placeholder, t.appendChild(s), this.config.closeButton) {
+      const n = document.createElement("button");
+      n.type = "button", n.classList.add("ux-select__clear"), n.title = this.localization.clearText, this.uxClearButton = n, t.appendChild(n);
     }
-    const o = document.createElement("div");
-    if (o.classList.add("ux-select__body"), this.uxBody = o, this.config.isSearchable) {
-      const l = document.createElement("div");
-      l.classList.add("ux-select__search");
-      const n = document.createElement("input");
-      n.type = "search", n.classList.add("ux-select-search__input"), n.placeholder = this.localization.searchText, this.uxSearchInput = n, l.appendChild(n), o.appendChild(l);
+    const i = document.createElement("div");
+    if (i.classList.add("ux-select__body"), this.uxBody = i, this.config.isSearchable) {
+      const n = document.createElement("div");
+      n.classList.add("ux-select__search");
+      const o = document.createElement("input");
+      o.type = "search", o.classList.add("ux-select-search__input"), o.placeholder = this.localization.searchText, this.uxSearchInput = o, n.appendChild(o), i.appendChild(n);
     }
     this.createGroupAndOptions();
-    const s = document.createElement("div"), i = ["ux-select", this.el.classList];
-    return this.state.multiple && i.push("-multiple"), this.state.disabled && i.push("-disabled"), this.config.optionStyle !== "default" && i.push(`-${this.config.optionStyle}`), s.className = i.join(" "), s.append(t, o), this.el.style.display = "none", this.el.insertAdjacentElement("afterend", s), this.el.nextElementSibling;
+    const l = document.createElement("div"), e = ["ux-select", this.el.classList];
+    return this.state.multiple && e.push("-multiple"), this.state.disabled && e.push("-disabled"), this.config.optionStyle !== "default" && e.push(`-${this.config.optionStyle}`), l.className = e.join(" "), l.append(t, i), this.el.style.display = "none", this.el.insertAdjacentElement("afterend", l), this.el.nextElementSibling;
   }
   enable() {
     this.state.disabled && (this.el.disabled = !1, this.uxEl.classList.remove("-disabled"), this.state.disabled = !1);
@@ -164,8 +165,8 @@ class x {
    * @param {Boolean} [isTriggerChange] Skip triggering "change" event
    */
   update(t = !0) {
-    const e = JSON.stringify(this.options);
-    this.options = this.extractOptions(!0), this.groups = this.extractGroups(), e !== JSON.stringify(this.options) && this.createGroupAndOptions(), this.setSelectState(), this.el.disabled ? this.disable() : this.enable(), t && u(this.el);
+    const s = JSON.stringify(this.options);
+    this.options = this.extractOptions(!0), this.groups = this.extractGroups(), s !== JSON.stringify(this.options) && this.createGroupAndOptions(), this.setSelectState(), this.el.disabled ? this.disable() : this.enable(), t && u(this.el);
   }
   clear() {
     for (const t of this.options)
@@ -177,8 +178,8 @@ class x {
   }
   onToggleShown(t) {
     t.preventDefault();
-    const e = t.target;
-    if (!this.state.disabled && !(this.uxClearButton && t.target === this.uxClearButton) && !(this.uxBody && this.uxBody.contains(e))) {
+    const s = t.target;
+    if (!this.state.disabled && !(this.uxClearButton && t.target === this.uxClearButton) && !(this.uxBody && this.uxBody.contains(s))) {
       if (this.uxEl.classList.contains("-shown")) {
         this.uxEl.classList.remove("-shown");
         return;
@@ -187,8 +188,8 @@ class x {
     }
   }
   onClickOutside(t) {
-    const e = t.target;
-    this.uxEl.contains(e) || this.uxEl.classList.remove("-shown");
+    const s = t.target;
+    this.uxEl.contains(s) || this.uxEl.classList.remove("-shown");
   }
   onClickClear(t) {
     if (t.preventDefault(), !this.state.disabled)
@@ -196,16 +197,16 @@ class x {
   }
   onClickOption(t) {
     t.preventDefault();
-    const e = t.target;
-    if (!e.classList.contains("-disabled") && !(!this.state.multiple && e.classList.contains("-selected"))) {
+    const s = t.target;
+    if (!s.classList.contains("-disabled") && !(!this.state.multiple && s.classList.contains("-selected"))) {
       if (this.state.multiple) {
         t.stopPropagation();
-        const o = this.options.find((s) => s.uxOption === e);
-        o && o.uxOption && (o.attributes.selected = !o.attributes.selected, o.element.selected = o.attributes.selected, o.uxOption.classList.toggle("-selected"));
+        const i = this.options.find((l) => l.uxOption === s);
+        i && i.uxOption && (i.attributes.selected = !i.attributes.selected, i.element.selected = i.attributes.selected, i.uxOption.classList.toggle("-selected"));
       } else
-        for (const o of this.options) {
-          const s = o.uxOption === e;
-          o.attributes.selected = s, o.element.selected = s, o.uxOption && o.uxOption.classList.toggle("-selected", s);
+        for (const i of this.options) {
+          const l = i.uxOption === s;
+          i.attributes.selected = l, i.element.selected = l, i.uxOption && i.uxOption.classList.toggle("-selected", l);
         }
       return this.config.hideOnSelect && this.uxEl.classList.remove("-shown"), this.update();
     }
@@ -213,25 +214,25 @@ class x {
   onSearch(t) {
     if (t.target === null)
       return;
-    const o = t.target.value.toLowerCase(), s = o.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), i = this.uxEl.querySelectorAll(".ux-select-group");
-    if (o === "") {
-      for (const n of this.options)
-        n.uxOption && (n.uxOption.style.display = "");
+    const i = t.target.value.toLowerCase(), l = i.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), e = this.uxEl.querySelectorAll(".ux-select-group");
+    if (i === "") {
+      for (const o of this.options)
+        o.uxOption && (o.uxOption.style.display = "");
       if (this.config.isGroupOptions)
-        for (const n of i)
-          n.style.display = "";
+        for (const o of e)
+          o.style.display = "";
       return;
     }
-    const l = new RegExp(s);
-    for (const n of this.options) {
-      const r = l.test(n.data.text.toLowerCase());
-      n.uxOption && (n.uxOption.style.display = r ? "" : "none");
+    const n = new RegExp(l);
+    for (const o of this.options) {
+      const r = n.test(o.data.text.toLowerCase());
+      o.uxOption && (o.uxOption.style.display = r ? "" : "none");
     }
     if (this.config.isGroupOptions)
-      for (const n of i) {
-        n.style.display = "";
-        const r = n.querySelector(".ux-select-group__list");
-        r && (n.style.display = r.clientHeight !== 0 ? "" : "none");
+      for (const o of e) {
+        o.style.display = "";
+        const r = o.querySelector(".ux-select-group__list");
+        r && (o.style.display = r.clientHeight !== 0 ? "" : "none");
       }
     p(this.el);
   }
