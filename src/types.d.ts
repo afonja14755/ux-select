@@ -4,7 +4,7 @@ export type UxSelectParams = {
   isGroupOptions?: boolean;
   hideOnClear?: boolean;
   hideOnSelect?: boolean;
-  optionStyle?: 'checkbox' | 'radio' | 'image' | 'default';
+  optionStyle?: string;
   closeButton?: boolean;
   placeholder?: string;
   searchText?: string;

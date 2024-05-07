@@ -22,13 +22,13 @@ class x {
     a(this, "uxSearchInput");
     a(this, "uxClearButton");
     this.el = t, this.config = {
-      isSearchable: s.isSearchable ?? !1,
-      isSearchFocus: s.isSearchFocus ?? !1,
-      isGroupOptions: s.isGroupOptions ?? !1,
-      hideOnClear: s.hideOnClear ?? !0,
-      hideOnSelect: s.hideOnSelect ?? !1,
-      optionStyle: s.optionStyle ?? "default",
-      closeButton: s.closeButton ?? !0
+      isSearchable: this.el.dataset.isSearchable !== void 0 ? this.el.dataset.isSearchable === "true" : s.isSearchable ?? !1,
+      isSearchFocus: this.el.dataset.isSearchFocus !== void 0 ? this.el.dataset.isSearchFocus === "true" : s.isSearchFocus ?? !1,
+      isGroupOptions: this.el.dataset.isGroupOptions !== void 0 ? this.el.dataset.isGroupOptions === "true" : s.isGroupOptions ?? !1,
+      hideOnClear: this.el.dataset.hideOnClear !== void 0 ? this.el.dataset.hideOnClear === "true" : s.hideOnClear ?? !0,
+      hideOnSelect: this.el.dataset.hideOnSelect !== void 0 ? this.el.dataset.hideOnSelect === "true" : s.hideOnSelect ?? !1,
+      optionStyle: this.el.dataset.optionStyle ?? s.optionStyle ?? "default",
+      closeButton: this.el.dataset.closeButton !== void 0 ? this.el.dataset.closeButton === "true" : s.closeButton ?? !0
     }, this.localization = {
       placeholder: this.el.dataset.placeholder ?? s.placeholder ?? "Select an option",
       searchText: this.el.dataset.searchText ?? s.searchText ?? "Search",

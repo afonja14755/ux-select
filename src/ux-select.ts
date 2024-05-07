@@ -31,13 +31,27 @@ export default class UxSelect {
     this.el = element;
 
     this.config = {
-      isSearchable: params.isSearchable ?? false,
-      isSearchFocus: params.isSearchFocus ?? false,
-      isGroupOptions: params.isGroupOptions ?? false,
-      hideOnClear: params.hideOnClear ?? true,
-      hideOnSelect: params.hideOnSelect ?? false,
-      optionStyle: params.optionStyle ?? 'default',
-      closeButton: params.closeButton ?? true,
+      isSearchable:
+        this.el.dataset.isSearchable !== undefined
+          ? this.el.dataset.isSearchable === 'true'
+          : params.isSearchable ?? false,
+      isSearchFocus:
+        this.el.dataset.isSearchFocus !== undefined
+          ? this.el.dataset.isSearchFocus === 'true'
+          : params.isSearchFocus ?? false,
+      isGroupOptions:
+        this.el.dataset.isGroupOptions !== undefined
+          ? this.el.dataset.isGroupOptions === 'true'
+          : params.isGroupOptions ?? false,
+      hideOnClear:
+        this.el.dataset.hideOnClear !== undefined ? this.el.dataset.hideOnClear === 'true' : params.hideOnClear ?? true,
+      hideOnSelect:
+        this.el.dataset.hideOnSelect !== undefined
+          ? this.el.dataset.hideOnSelect === 'true'
+          : params.hideOnSelect ?? false,
+      optionStyle: this.el.dataset.optionStyle ?? params.optionStyle ?? 'default',
+      closeButton:
+        this.el.dataset.closeButton !== undefined ? this.el.dataset.closeButton === 'true' : params.closeButton ?? true,
     };
     this.localization = {
       placeholder: this.el.dataset.placeholder ?? params.placeholder ?? 'Select an option',
