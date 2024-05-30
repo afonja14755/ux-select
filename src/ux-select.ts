@@ -91,7 +91,8 @@ export default class UxSelect {
         uxOption = this.uxEl.querySelector(`.ux-select-group__elem[data-value='${option.value}']`);
       }
 
-      let optionImage = undefined;
+      let optionImage = undefined,
+        optionSvg = undefined;
       if (this.config.optionStyle === 'image' && option.dataset.imageSrc) {
         optionImage = {
           src: option.dataset.imageSrc,
@@ -99,6 +100,12 @@ export default class UxSelect {
           alt: option.dataset.imageAlt ?? '',
           width: option.dataset.imageWidth ? Number(option.dataset.imageWidth) : 24,
           height: option.dataset.imageHeight ? Number(option.dataset.imageHeight) : 24,
+        };
+      } else if (this.config.optionStyle === 'image' && option.dataset.svgSrc) {
+        optionSvg = {
+          src: option.dataset.svgSrc,
+          width: option.dataset.svgWidth ? Number(option.dataset.svgWidth) : 24,
+          height: option.dataset.svgHeight ? Number(option.dataset.svgHeight) : 24,
         };
       }
 
@@ -113,6 +120,7 @@ export default class UxSelect {
           value: option.value,
         },
         image: optionImage,
+        svg: optionSvg,
         element: option,
         uxOption,
       });
@@ -240,6 +248,21 @@ export default class UxSelect {
         }
 
         selectListElem.appendChild(optionImageElem);
+      }
+
+      if (this.config.optionStyle === 'image' && option.svg) {
+        const optionSvgElem = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+          optionUseElem = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+
+        optionSvgElem.classList.add('ux-select-group-elem__image');
+        optionSvgElem.setAttribute('viewBox', `0 0 ${String(option.svg.width)} ${String(option.svg.height)}`);
+        optionSvgElem.setAttribute('width', String(option.svg.width));
+        optionSvgElem.setAttribute('height', String(option.svg.height));
+        optionUseElem.setAttribute('href', option.svg.src);
+
+        optionSvgElem.appendChild(optionUseElem);
+
+        selectListElem.appendChild(optionSvgElem);
       }
 
       selectListElem.addEventListener('click', this.onClickOption.bind(this));

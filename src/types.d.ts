@@ -29,6 +29,11 @@ export type UxSelectOptions = {
     width: number;
     height: number;
   };
+  svg?: {
+    src: string;
+    width: number;
+    height: number;
+  };
   element: HTMLOptionElement;
   uxOption: HTMLLIElement | undefined;
 };

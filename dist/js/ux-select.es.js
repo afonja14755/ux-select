@@ -1,27 +1,27 @@
-var d = Object.defineProperty;
-var h = (c, t, s) => t in c ? d(c, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : c[t] = s;
-var a = (c, t, s) => (h(c, typeof t != "symbol" ? t + "" : t, s), s);
-function u(c) {
-  const t = new Event("change");
-  c.dispatchEvent(t);
+var h = Object.defineProperty;
+var p = (r, e, s) => e in r ? h(r, e, { enumerable: !0, configurable: !0, writable: !0, value: s }) : r[e] = s;
+var c = (r, e, s) => (p(r, typeof e != "symbol" ? e + "" : e, s), s);
+function u(r) {
+  const e = new Event("change");
+  r.dispatchEvent(e);
 }
-function p(c) {
-  const t = new Event("input");
-  c.dispatchEvent(t);
+function g(r) {
+  const e = new Event("input");
+  r.dispatchEvent(e);
 }
 class x {
-  constructor(t, s = {}) {
-    a(this, "el");
-    a(this, "config");
-    a(this, "localization");
-    a(this, "state");
-    a(this, "options");
-    a(this, "groups");
-    a(this, "uxEl");
-    a(this, "uxBody");
-    a(this, "uxSearchInput");
-    a(this, "uxClearButton");
-    this.el = t, this.config = {
+  constructor(e, s = {}) {
+    c(this, "el");
+    c(this, "config");
+    c(this, "localization");
+    c(this, "state");
+    c(this, "options");
+    c(this, "groups");
+    c(this, "uxEl");
+    c(this, "uxBody");
+    c(this, "uxSearchInput");
+    c(this, "uxClearButton");
+    this.el = e, this.config = {
       isSearchable: this.el.dataset.isSearchable !== void 0 ? this.el.dataset.isSearchable === "true" : s.isSearchable ?? !1,
       isSearchFocus: this.el.dataset.isSearchFocus !== void 0 ? this.el.dataset.isSearchFocus === "true" : s.isSearchFocus ?? !1,
       isGroupOptions: this.el.dataset.isGroupOptions !== void 0 ? this.el.dataset.isGroupOptions === "true" : s.isGroupOptions ?? !1,
@@ -39,120 +39,129 @@ class x {
       disabled: this.el.disabled
     }, this.options = this.extractOptions(), this.groups = this.extractGroups(), this.uxEl = this.create(), this.setSelectState(), this.bindEvents();
   }
-  extractOptions(t = !1) {
-    const s = this.el.options, i = this.config.isGroupOptions, l = [];
-    for (const e of s) {
-      if (e.value === "")
+  extractOptions(e = !1) {
+    const s = this.el.options, o = this.config.isGroupOptions, l = [];
+    for (const t of s) {
+      if (t.value === "")
         continue;
-      let n = "empty";
-      i && e.dataset.uxSelectGroup && (n = e.dataset.uxSelectGroup);
-      let o;
-      t && (o = this.uxEl.querySelector(`.ux-select-group__elem[data-value='${e.value}']`));
-      let r;
-      this.config.optionStyle === "image" && e.dataset.imageSrc && (r = {
-        src: e.dataset.imageSrc,
-        srcset: e.dataset.imageSrcset ?? void 0,
-        alt: e.dataset.imageAlt ?? "",
-        width: e.dataset.imageWidth ? Number(e.dataset.imageWidth) : 24,
-        height: e.dataset.imageHeight ? Number(e.dataset.imageHeight) : 24
+      let a = "empty";
+      o && t.dataset.uxSelectGroup && (a = t.dataset.uxSelectGroup);
+      let i;
+      e && (i = this.uxEl.querySelector(`.ux-select-group__elem[data-value='${t.value}']`));
+      let n, d;
+      this.config.optionStyle === "image" && t.dataset.imageSrc ? n = {
+        src: t.dataset.imageSrc,
+        srcset: t.dataset.imageSrcset ?? void 0,
+        alt: t.dataset.imageAlt ?? "",
+        width: t.dataset.imageWidth ? Number(t.dataset.imageWidth) : 24,
+        height: t.dataset.imageHeight ? Number(t.dataset.imageHeight) : 24
+      } : this.config.optionStyle === "image" && t.dataset.svgSrc && (d = {
+        src: t.dataset.svgSrc,
+        width: t.dataset.svgWidth ? Number(t.dataset.svgWidth) : 24,
+        height: t.dataset.svgHeight ? Number(t.dataset.svgHeight) : 24
       }), l.push({
         attributes: {
-          selected: e.selected,
-          disabled: e.disabled,
-          group: n
+          selected: t.selected,
+          disabled: t.disabled,
+          group: a
         },
         data: {
-          text: e.textContent ? e.textContent.trim() : "",
-          value: e.value
+          text: t.textContent ? t.textContent.trim() : "",
+          value: t.value
         },
-        image: r,
-        element: e,
-        uxOption: o
+        image: n,
+        svg: d,
+        element: t,
+        uxOption: i
       });
     }
     return l;
   }
   extractGroups() {
-    const t = this.el.options, s = this.config.isGroupOptions, i = /* @__PURE__ */ new Set();
-    for (const l of t) {
+    const e = this.el.options, s = this.config.isGroupOptions, o = /* @__PURE__ */ new Set();
+    for (const l of e) {
       if (l.value === "")
         continue;
-      let e = "empty";
-      s && l.dataset.uxSelectGroup && (e = l.dataset.uxSelectGroup), i.add(e);
+      let t = "empty";
+      s && l.dataset.uxSelectGroup && (t = l.dataset.uxSelectGroup), o.add(t);
     }
-    return Array.from(i);
+    return Array.from(o);
   }
   setSelectState() {
-    const t = this.uxEl.querySelector(".ux-select__title"), s = this.options.reduce((i, l) => (l.attributes.selected && i.push(l.data.text), i), []);
-    if (s.length > 0 ? (s.length === 1 ? t.textContent = s[0] : this.state.multiple && (t.textContent = `${this.localization.selectedText} ${s.length}`), this.uxEl.classList.add("-filled")) : (t.textContent = this.localization.placeholder, this.uxEl.classList.remove("-filled")), this.config.isGroupOptions)
-      for (const i of this.groups) {
-        const l = this.uxEl.querySelector(`[data-ux-group="${i}"]`);
+    const e = this.uxEl.querySelector(".ux-select__title"), s = this.options.reduce((o, l) => (l.attributes.selected && o.push(l.data.text), o), []);
+    if (s.length > 0 ? (s.length === 1 ? e.textContent = s[0] : this.state.multiple && (e.textContent = `${this.localization.selectedText} ${s.length}`), this.uxEl.classList.add("-filled")) : (e.textContent = this.localization.placeholder, this.uxEl.classList.remove("-filled")), this.config.isGroupOptions)
+      for (const o of this.groups) {
+        const l = this.uxEl.querySelector(`[data-ux-group="${o}"]`);
         if (!l)
           continue;
-        const e = l.querySelector(".ux-select-group__list");
-        if (!e)
+        const t = l.querySelector(".ux-select-group__list");
+        if (!t)
           continue;
-        const o = Array.from(e.querySelectorAll(".ux-select-group__elem")).every((r) => {
-          r.classList.contains("-disabled");
+        const i = Array.from(t.querySelectorAll(".ux-select-group__elem")).every((n) => {
+          n.classList.contains("-disabled");
         });
-        l.classList.toggle("-disabled", o);
+        l.classList.toggle("-disabled", i);
       }
   }
-  createGroupElement(t) {
+  createGroupElement(e) {
     const s = document.createElement("div");
-    if (s.classList.add("ux-select__group", "ux-select-group"), s.dataset.uxGroup = t, t === "empty")
+    if (s.classList.add("ux-select__group", "ux-select-group"), s.dataset.uxGroup = e, e === "empty")
       s.classList.add("-empty");
     else {
       const l = document.createElement("div");
-      l.classList.add("ux-select-group__title"), l.textContent = t, s.appendChild(l);
+      l.classList.add("ux-select-group__title"), l.textContent = e, s.appendChild(l);
     }
-    const i = document.createElement("ul");
-    return i.classList.add("ux-select-group__list"), s.appendChild(i), s;
+    const o = document.createElement("ul");
+    return o.classList.add("ux-select-group__list"), s.appendChild(o), s;
   }
   createGroupAndOptions() {
-    const t = document.createElement("div");
-    t.classList.add("ux-select__dropdown");
-    const s = document.createDocumentFragment(), i = {};
-    for (const e of this.groups) {
-      const n = this.createGroupElement(e);
-      s.appendChild(n), i[e] = document.createDocumentFragment();
+    const e = document.createElement("div");
+    e.classList.add("ux-select__dropdown");
+    const s = document.createDocumentFragment(), o = {};
+    for (const t of this.groups) {
+      const a = this.createGroupElement(t);
+      s.appendChild(a), o[t] = document.createDocumentFragment();
     }
-    t.appendChild(s);
-    for (const e of this.options) {
-      const n = document.createElement("li");
-      if (n.classList.add("ux-select-group__elem"), n.dataset.value = e.data.value, n.textContent = e.data.text, e.attributes.selected && n.classList.add("-selected"), e.attributes.disabled && n.classList.add("-disabled"), this.config.optionStyle === "image" && e.image) {
-        const o = document.createElement("img");
-        o.classList.add("ux-select-group-elem__image"), o.src = e.image.src, o.width = e.image.width, o.height = e.image.height, o.alt = e.image.alt, e.image.srcset && (o.srcset = `${e.image.src} 1x, ${e.image.srcset} 2x`), n.appendChild(o);
+    e.appendChild(s);
+    for (const t of this.options) {
+      const a = document.createElement("li");
+      if (a.classList.add("ux-select-group__elem"), a.dataset.value = t.data.value, a.textContent = t.data.text, t.attributes.selected && a.classList.add("-selected"), t.attributes.disabled && a.classList.add("-disabled"), this.config.optionStyle === "image" && t.image) {
+        const i = document.createElement("img");
+        i.classList.add("ux-select-group-elem__image"), i.src = t.image.src, i.width = t.image.width, i.height = t.image.height, i.alt = t.image.alt, t.image.srcset && (i.srcset = `${t.image.src} 1x, ${t.image.srcset} 2x`), a.appendChild(i);
       }
-      n.addEventListener("click", this.onClickOption.bind(this)), i[e.attributes.group].appendChild(n), e.uxOption = n;
+      if (this.config.optionStyle === "image" && t.svg) {
+        const i = document.createElementNS("http://www.w3.org/2000/svg", "svg"), n = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        i.classList.add("ux-select-group-elem__image"), i.setAttribute("viewBox", `0 0 ${String(t.svg.width)} ${String(t.svg.height)}`), i.setAttribute("width", String(t.svg.width)), i.setAttribute("height", String(t.svg.height)), n.setAttribute("href", t.svg.src), i.appendChild(n), a.appendChild(i);
+      }
+      a.addEventListener("click", this.onClickOption.bind(this)), o[t.attributes.group].appendChild(a), t.uxOption = a;
     }
-    for (const e of this.groups) {
-      const n = i[e], o = t.querySelector(`[data-ux-group="${e}"] .ux-select-group__list`);
-      o && o.appendChild(n);
+    for (const t of this.groups) {
+      const a = o[t], i = e.querySelector(`[data-ux-group="${t}"] .ux-select-group__list`);
+      i && i.appendChild(a);
     }
     if (!this.uxBody)
       throw new Error("uxBody is undefined");
     const l = this.config.isSearchable ? 1 : 0;
-    this.uxBody.childNodes[l] ? this.uxBody.replaceChild(t, this.uxBody.childNodes[l]) : this.uxBody.appendChild(t);
+    this.uxBody.childNodes[l] ? this.uxBody.replaceChild(e, this.uxBody.childNodes[l]) : this.uxBody.appendChild(e);
   }
   create() {
-    const t = document.createElement("div");
-    t.classList.add("ux-select__head");
+    const e = document.createElement("div");
+    e.classList.add("ux-select__head");
     const s = document.createElement("div");
-    if (s.classList.add("ux-select__title"), s.textContent = this.localization.placeholder, t.appendChild(s), this.config.closeButton) {
-      const n = document.createElement("button");
-      n.type = "button", n.classList.add("ux-select__clear"), n.title = this.localization.clearText, this.uxClearButton = n, t.appendChild(n);
+    if (s.classList.add("ux-select__title"), s.textContent = this.localization.placeholder, e.appendChild(s), this.config.closeButton) {
+      const a = document.createElement("button");
+      a.type = "button", a.classList.add("ux-select__clear"), a.title = this.localization.clearText, this.uxClearButton = a, e.appendChild(a);
     }
-    const i = document.createElement("div");
-    if (i.classList.add("ux-select__body"), this.uxBody = i, this.config.isSearchable) {
-      const n = document.createElement("div");
-      n.classList.add("ux-select__search");
-      const o = document.createElement("input");
-      o.type = "search", o.classList.add("ux-select-search__input"), o.placeholder = this.localization.searchText, this.uxSearchInput = o, n.appendChild(o), i.appendChild(n);
+    const o = document.createElement("div");
+    if (o.classList.add("ux-select__body"), this.uxBody = o, this.config.isSearchable) {
+      const a = document.createElement("div");
+      a.classList.add("ux-select__search");
+      const i = document.createElement("input");
+      i.type = "search", i.classList.add("ux-select-search__input"), i.placeholder = this.localization.searchText, this.uxSearchInput = i, a.appendChild(i), o.appendChild(a);
     }
     this.createGroupAndOptions();
-    const l = document.createElement("div"), e = ["ux-select", this.el.classList];
-    return this.state.multiple && e.push("-multiple"), this.state.disabled && e.push("-disabled"), this.config.optionStyle !== "default" && e.push(`-${this.config.optionStyle}`), l.className = e.join(" "), l.append(t, i), this.el.style.display = "none", this.el.insertAdjacentElement("afterend", l), this.el.nextElementSibling;
+    const l = document.createElement("div"), t = ["ux-select", this.el.classList];
+    return this.state.multiple && t.push("-multiple"), this.state.disabled && t.push("-disabled"), this.config.optionStyle !== "default" && t.push(`-${this.config.optionStyle}`), l.className = t.join(" "), l.append(e, o), this.el.style.display = "none", this.el.insertAdjacentElement("afterend", l), this.el.nextElementSibling;
   }
   enable() {
     this.state.disabled && (this.el.disabled = !1, this.uxEl.classList.remove("-disabled"), this.state.disabled = !1);
@@ -164,22 +173,22 @@ class x {
    *
    * @param {Boolean} [isTriggerChange] Skip triggering "change" event
    */
-  update(t = !0) {
+  update(e = !0) {
     const s = JSON.stringify(this.options);
-    this.options = this.extractOptions(!0), this.groups = this.extractGroups(), s !== JSON.stringify(this.options) && this.createGroupAndOptions(), this.setSelectState(), this.el.disabled ? this.disable() : this.enable(), t && u(this.el);
+    this.options = this.extractOptions(!0), this.groups = this.extractGroups(), s !== JSON.stringify(this.options) && this.createGroupAndOptions(), this.setSelectState(), this.el.disabled ? this.disable() : this.enable(), e && u(this.el);
   }
   clear() {
-    for (const t of this.options)
-      t.attributes.selected && (t.attributes.selected = !1, t.element.selected = !1, t.uxOption && t.uxOption.classList.remove("-selected"));
+    for (const e of this.options)
+      e.attributes.selected && (e.attributes.selected = !1, e.element.selected = !1, e.uxOption && e.uxOption.classList.remove("-selected"));
     this.setSelectState(), u(this.el);
   }
   destroy() {
     this.uxEl.remove(), this.el.style.display = "";
   }
-  onToggleShown(t) {
-    t.preventDefault();
-    const s = t.target;
-    if (!this.state.disabled && !(this.uxClearButton && t.target === this.uxClearButton) && !(this.uxBody && this.uxBody.contains(s))) {
+  onToggleShown(e) {
+    e.preventDefault();
+    const s = e.target;
+    if (!this.state.disabled && !(this.uxClearButton && e.target === this.uxClearButton) && !(this.uxBody && this.uxBody.contains(s))) {
       if (this.uxEl.classList.contains("-shown")) {
         this.uxEl.classList.remove("-shown");
         return;
@@ -187,54 +196,54 @@ class x {
       this.uxEl.classList.add("-shown"), this.config.isSearchable && this.uxSearchInput && (this.uxSearchInput.value = "", this.uxSearchInput.dispatchEvent(new Event("input")), this.config.isSearchFocus && this.uxSearchInput.focus());
     }
   }
-  onClickOutside(t) {
-    const s = t.target;
+  onClickOutside(e) {
+    const s = e.target;
     this.uxEl.contains(s) || this.uxEl.classList.remove("-shown");
   }
-  onClickClear(t) {
-    if (t.preventDefault(), !this.state.disabled)
+  onClickClear(e) {
+    if (e.preventDefault(), !this.state.disabled)
       return this.config.hideOnClear && this.uxEl.classList.remove("-shown"), this.clear();
   }
-  onClickOption(t) {
-    t.preventDefault();
-    const s = t.target;
+  onClickOption(e) {
+    e.preventDefault();
+    const s = e.target;
     if (!s.classList.contains("-disabled") && !(!this.state.multiple && s.classList.contains("-selected"))) {
       if (this.state.multiple) {
-        t.stopPropagation();
-        const i = this.options.find((l) => l.uxOption === s);
-        i && i.uxOption && (i.attributes.selected = !i.attributes.selected, i.element.selected = i.attributes.selected, i.uxOption.classList.toggle("-selected"));
+        e.stopPropagation();
+        const o = this.options.find((l) => l.uxOption === s);
+        o && o.uxOption && (o.attributes.selected = !o.attributes.selected, o.element.selected = o.attributes.selected, o.uxOption.classList.toggle("-selected"));
       } else
-        for (const i of this.options) {
-          const l = i.uxOption === s;
-          i.attributes.selected = l, i.element.selected = l, i.uxOption && i.uxOption.classList.toggle("-selected", l);
+        for (const o of this.options) {
+          const l = o.uxOption === s;
+          o.attributes.selected = l, o.element.selected = l, o.uxOption && o.uxOption.classList.toggle("-selected", l);
         }
       return this.config.hideOnSelect && this.uxEl.classList.remove("-shown"), this.update();
     }
   }
-  onSearch(t) {
-    if (t.target === null)
+  onSearch(e) {
+    if (e.target === null)
       return;
-    const i = t.target.value.toLowerCase(), l = i.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), e = this.uxEl.querySelectorAll(".ux-select-group");
-    if (i === "") {
-      for (const o of this.options)
-        o.uxOption && (o.uxOption.style.display = "");
+    const o = e.target.value.toLowerCase(), l = o.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), t = this.uxEl.querySelectorAll(".ux-select-group");
+    if (o === "") {
+      for (const i of this.options)
+        i.uxOption && (i.uxOption.style.display = "");
       if (this.config.isGroupOptions)
-        for (const o of e)
-          o.style.display = "";
+        for (const i of t)
+          i.style.display = "";
       return;
     }
-    const n = new RegExp(l);
-    for (const o of this.options) {
-      const r = n.test(o.data.text.toLowerCase());
-      o.uxOption && (o.uxOption.style.display = r ? "" : "none");
+    const a = new RegExp(l);
+    for (const i of this.options) {
+      const n = a.test(i.data.text.toLowerCase());
+      i.uxOption && (i.uxOption.style.display = n ? "" : "none");
     }
     if (this.config.isGroupOptions)
-      for (const o of e) {
-        o.style.display = "";
-        const r = o.querySelector(".ux-select-group__list");
-        r && (o.style.display = r.clientHeight !== 0 ? "" : "none");
+      for (const i of t) {
+        i.style.display = "";
+        const n = i.querySelector(".ux-select-group__list");
+        n && (i.style.display = n.clientHeight !== 0 ? "" : "none");
       }
-    p(this.el);
+    g(this.el);
   }
   bindEvents() {
     this.uxEl.addEventListener("click", this.onToggleShown.bind(this)), this.uxClearButton && this.uxClearButton.addEventListener("click", this.onClickClear.bind(this)), window.addEventListener("click", this.onClickOutside.bind(this)), this.config.isSearchable && this.uxSearchInput && this.uxSearchInput.addEventListener("input", this.onSearch.bind(this));
