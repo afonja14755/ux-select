@@ -32,6 +32,12 @@
   #{$ux-prefix}-option-styled-border-width: $ux-option-styled-border-width;
   #{$ux-prefix}-option-styled-background-color: $ux-option-styled-background-color;
 
+  // Select All
+  #{$ux-prefix}-select-all-checkbox-size: $ux-select-all-checkbox-size;
+  #{$ux-prefix}-select-all-checkbox-border-width: $ux-select-all-checkbox-border-width;
+  #{$ux-prefix}-select-all-checkbox-border-radius: $ux-select-all-checkbox-border-radius;
+  #{$ux-prefix}-select-all-checkbox-color: $ux-select-all-checkbox-color;
+
   //Search
   #{$ux-prefix}-search-background-color: $ux-search-background-color;
   #{$ux-prefix}-search-text-color: $ux-search-text-color;
@@ -200,6 +206,56 @@
       &:focus {
         border-color: var(#{$ux-prefix}-border-hover-color);
       }
+    }
+  }
+
+  &__select-all {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(#{$ux-prefix}-padding-y) var(#{$ux-prefix}-padding-x);
+    background-color: var(#{$ux-prefix}-background-color);
+    transition: background-color var(#{$ux-prefix}-transition-duration) var(#{$ux-prefix}-transition-easing);
+
+    &:hover {
+      background-color: var(#{$ux-prefix}-option-hovered-bg-color);
+    }
+  }
+
+  &-select-all {
+    &__checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(#{$ux-prefix}-select-all-checkbox-size);
+      height: var(#{$ux-prefix}-select-all-checkbox-size);
+      border: var(#{$ux-prefix}-select-all-checkbox-border-width) solid var(#{$ux-prefix}-select-all-checkbox-color);
+      border-radius: var(#{$ux-prefix}-select-all-checkbox-border-radius);
+
+      &:after {
+        content: '';
+        display: block;
+        width: calc(var(#{$ux-prefix}-select-all-checkbox-size) - 0.5rem);
+        height: calc(var(#{$ux-prefix}-select-all-checkbox-size) - 0.5rem);
+        background-color: transparent;
+      }
+
+      &.-some {
+        &:after {
+          height: calc((var(#{$ux-prefix}-select-all-checkbox-size) - 0.5rem) / 2);
+          background-color: var(#{$ux-prefix}-select-all-checkbox-color);
+        }
+      }
+
+      &.-all {
+        &:after {
+          background-color: var(#{$ux-prefix}-select-all-checkbox-color);
+        }
+      }
+    }
+
+    &__text {
+      margin-left: calc(var(#{$ux-prefix}-padding-x) / 2);
     }
   }
 

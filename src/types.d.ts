@@ -6,10 +6,12 @@ export type UxSelectParams = {
   hideOnSelect?: boolean;
   optionStyle?: string;
   closeButton?: boolean;
+  selectAllOption?: boolean;
   placeholder?: string;
   searchText?: string;
   clearText?: string;
   selectedText?: string;
+  selectAllText?: string;
 };
 
 export type UxSelectOptions = {
@@ -40,12 +42,27 @@ export type UxSelectOptions = {
 
 export type UxSelectConfig = Pick<
   UxSelectParams,
-  'isSearchable' | 'isSearchFocus' | 'isGroupOptions' | 'hideOnClear' | 'hideOnSelect' | 'optionStyle' | 'closeButton'
+  | 'isSearchable'
+  | 'isSearchFocus'
+  | 'isGroupOptions'
+  | 'hideOnClear'
+  | 'hideOnSelect'
+  | 'optionStyle'
+  | 'closeButton'
+  | 'selectAllOption'
 >;
 
-export type UxSelectLocalization = Pick<UxSelectParams, 'placeholder', 'searchText', 'clearText', 'selectedText'>;
+export type UxSelectLocalization = Pick<
+  UxSelectParams,
+  'placeholder',
+  'searchText',
+  'clearText',
+  'selectedText',
+  'selectAllText'
+>;
 
 export type UxSelectState = {
   multiple: boolean;
   disabled: boolean;
+  isAllSelected: boolean;
 };

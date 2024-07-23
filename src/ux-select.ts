@@ -26,6 +26,7 @@ export default class UxSelect {
   private uxBody: HTMLDivElement | undefined;
   private uxSearchInput: HTMLInputElement | undefined;
   private uxClearButton: HTMLButtonElement | undefined;
+  private uxSelectAll: HTMLDivElement | undefined;
 
   constructor(element: HTMLSelectElement, params: UxSelectParams = {}) {
     this.el = element;
@@ -52,16 +53,22 @@ export default class UxSelect {
       optionStyle: this.el.dataset.optionStyle ?? params.optionStyle ?? 'default',
       closeButton:
         this.el.dataset.closeButton !== undefined ? this.el.dataset.closeButton === 'true' : params.closeButton ?? true,
+      selectAllOption:
+        this.el.dataset.selectAllOption !== undefined
+          ? this.el.dataset.selectAllOption === 'true'
+          : params.selectAllOption ?? false,
     };
     this.localization = {
       placeholder: this.el.dataset.placeholder ?? params.placeholder ?? 'Select an option',
       searchText: this.el.dataset.searchText ?? params.searchText ?? 'Search',
       clearText: this.el.dataset.clearText ?? params.clearText ?? 'Clear option(s)',
       selectedText: this.el.dataset.selectedText ?? params.selectedText ?? 'Selected:',
+      selectAllText: this.el.dataset.selectAllText ?? params.selectAllText ?? 'Select all',
     };
     this.state = {
       multiple: this.el.multiple,
       disabled: this.el.disabled,
+      isAllSelected: false,
     };
 
     this.options = this.extractOptions();
@@ -182,6 +189,25 @@ export default class UxSelect {
         htmlGroup.classList.toggle('-disabled', isAllDisabled);
       }
     }
+
+    if (this.uxSelectAll) {
+      this.uxSelectAll.querySelector('.ux-select-select-all__checkbox')?.classList.remove('-null', '-all', '-some');
+
+      const allSelected = this.options.every((option) => option.attributes.selected);
+      const someSelected = this.options.some((option) => option.attributes.selected);
+
+      this.state.isAllSelected = allSelected;
+
+      let selectAllClass = '-null';
+
+      if (allSelected) {
+        selectAllClass = '-all';
+      } else if (someSelected) {
+        selectAllClass = '-some';
+      }
+
+      this.uxSelectAll.querySelector('.ux-select-select-all__checkbox')?.classList.add(selectAllClass);
+    }
   }
 
   private createGroupElement(group: string): HTMLElement {
@@ -208,6 +234,24 @@ export default class UxSelect {
   private createGroupAndOptions() {
     const selectList = document.createElement('div');
     selectList.classList.add('ux-select__dropdown');
+
+    if (this.state.multiple && this.config.selectAllOption) {
+      const selectAllWrap = document.createElement('div');
+      selectAllWrap.classList.add('ux-select__select-all');
+
+      const selectAllCheckbox = document.createElement('div');
+      selectAllCheckbox.classList.add('ux-select-select-all__checkbox');
+
+      const selectAllText = document.createElement('div');
+      selectAllText.classList.add('ux-select-select-all__text');
+      selectAllText.textContent = this.localization.selectAllText;
+
+      selectAllWrap.append(selectAllCheckbox, selectAllText);
+
+      this.uxSelectAll = selectAllWrap;
+      this.uxSelectAll.addEventListener('click', this.onClickSelectAll.bind(this));
+      selectList.appendChild(selectAllWrap);
+    }
 
     const groupFragment = document.createDocumentFragment();
     const optionsFragmentsByGroup: { [key: string]: DocumentFragment } = {};
@@ -319,6 +363,7 @@ export default class UxSelect {
 
       const selectSearch = document.createElement('input');
       selectSearch.type = 'search';
+      selectSearch.name = 'ux-select-search';
       selectSearch.classList.add('ux-select-search__input');
       selectSearch.placeholder = this.localization.searchText;
       this.uxSearchInput = selectSearch;
@@ -441,6 +486,23 @@ export default class UxSelect {
     if (this.config.hideOnClear) this.uxEl.classList.remove('-shown');
 
     return this.clear();
+  }
+
+  private onClickSelectAll(e: Event): void {
+    e.preventDefault();
+
+    const allSelected = this.options.every((option) => option.attributes.selected);
+    for (const option of this.options) {
+      if (!option.attributes.disabled) {
+        option.attributes.selected = !allSelected;
+        option.element.selected = !allSelected;
+        option.uxOption?.classList.toggle('-selected', !allSelected);
+      }
+    }
+
+    if (this.config.hideOnSelect) this.uxEl.classList.remove('-shown');
+
+    return this.update();
   }
 
   private onClickOption(e: Event): void {

@@ -30,8 +30,14 @@ $ux-option-disabled-bg-color: rgb(244 244 244);
 
 $ux-option-styled-outline-width: 1px;
 $ux-option-styled-checkbox-outline-radius: 0.25rem;
-$ux-option-styled-border-width: 0.1875rem;
+$ux-option-styled-border-width: 3px;
 $ux-option-styled-background-color: rgb(0 224 255);
+
+// Select All
+$ux-select-all-checkbox-size: 1rem;
+$ux-select-all-checkbox-border-width: 1px;
+$ux-select-all-checkbox-border-radius: 0.25rem;
+$ux-select-all-checkbox-color: rgb(0 224 255);
 
 // Search
 $ux-search-background-color: rgb(255 255 255);
