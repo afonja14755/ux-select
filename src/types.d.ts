@@ -1,44 +1,44 @@
 export type UxSelectParams = {
-  isSearchable?: boolean;
-  isSearchFocus?: boolean;
-  isGroupOptions?: boolean;
-  hideOnClear?: boolean;
-  hideOnSelect?: boolean;
-  optionStyle?: string;
-  closeButton?: boolean;
-  selectAllOption?: boolean;
-  placeholder?: string;
-  searchText?: string;
-  clearText?: string;
-  selectedText?: string;
-  selectAllText?: string;
-};
+  isSearchable?: boolean
+  isSearchFocus?: boolean
+  isGroupOptions?: boolean
+  hideOnClear?: boolean
+  hideOnSelect?: boolean
+  optionStyle?: string
+  closeButton?: boolean
+  selectAllOption?: boolean
+  placeholder?: string
+  searchText?: string
+  clearText?: string
+  selectedText?: string
+  selectAllText?: string
+}
 
 export type UxSelectOptions = {
   attributes: {
-    selected: boolean;
-    disabled: boolean;
-    group: string;
-  };
+    selected: boolean
+    disabled: boolean
+    group: string
+  }
   data: {
-    text: string;
-    value: string;
-  };
+    text: string
+    value: string
+  }
   image?: {
-    src: string;
-    srcset: string | undefined;
-    alt: string;
-    width: number;
-    height: number;
-  };
+    src: string
+    srcset: string | undefined
+    alt: string
+    width: number
+    height: number
+  }
   svg?: {
-    src: string;
-    width: number;
-    height: number;
-  };
-  element: HTMLOptionElement;
-  uxOption: HTMLLIElement | undefined;
-};
+    src: string
+    width: number
+    height: number
+  }
+  element: HTMLOptionElement
+  uxOption: HTMLLIElement | undefined
+}
 
 export type UxSelectConfig = Pick<
   UxSelectParams,
@@ -50,7 +50,7 @@ export type UxSelectConfig = Pick<
   | 'optionStyle'
   | 'closeButton'
   | 'selectAllOption'
->;
+>
 
 export type UxSelectLocalization = Pick<
   UxSelectParams,
@@ -59,10 +59,10 @@ export type UxSelectLocalization = Pick<
   'clearText',
   'selectedText',
   'selectAllText'
->;
+>
 
 export type UxSelectState = {
-  multiple: boolean;
-  disabled: boolean;
-  isAllSelected: boolean;
-};
+  multiple: boolean
+  disabled: boolean
+  isAllSelected: boolean
+}

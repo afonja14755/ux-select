@@ -1,9 +1,5 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
-
-function resDir(path: string) {
-  return resolve(__dirname, path);
-}
+import { resolve } from 'path'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   base: './',
@@ -14,17 +10,17 @@ export default defineConfig({
       output: {
         extend: true,
         assetFileNames: (assetInfo) => {
-          return assetInfo.name === 'style.css' ? 'css/ux-select.css' : '[name][extname]';
-        },
-      },
+          return assetInfo.name === 'style.css' ? 'css/ux-select.css' : '[name][extname]'
+        }
+      }
     },
     lib: {
-      entry: resDir('src/ux-select.ts'),
-      name: 'ux-select',
+      entry: resolve(__dirname, 'src/ux-select.ts'),
+      name: 'UxSelect',
       formats: ['es', 'iife'],
       fileName: (format, entryName) => {
-        return `js/${entryName}.${format}.js`;
-      },
-    },
-  },
-});
+        return `js/${entryName}.${format}.js`
+      }
+    }
+  }
+})

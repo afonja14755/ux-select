@@ -60,14 +60,16 @@
   width: 100%;
   margin: 0;
   padding: var(#{$ux-prefix}-padding-y) var(#{$ux-prefix}-padding-x);
-  border: var(#{$ux-prefix}-border-width) var(#{$ux-prefix}-border-style) var(#{$ux-prefix}-border-color);
+  border: var(#{$ux-prefix}-border-width) var(#{$ux-prefix}-border-style)
+    var(#{$ux-prefix}-border-color);
   border-radius: var(#{$ux-prefix}-border-radius);
   background-color: var(#{$ux-prefix}-background-color);
   font-size: var(#{$ux-prefix}-font-size);
   font-weight: var(#{$ux-prefix}-font-weight);
   line-height: var(#{$ux-prefix}-line-height);
   color: var(#{$ux-prefix}-text-color);
-  transition: border-color var(#{$ux-prefix}-transition-duration) var(#{$ux-prefix}-transition-easing);
+  transition: border-color var(#{$ux-prefix}-transition-duration)
+    var(#{$ux-prefix}-transition-easing);
 
   &.-disabled {
     cursor: not-allowed;
@@ -117,7 +119,8 @@
       height: 1rem;
       margin-left: 0.5rem;
       background: transparent var(#{$ux-prefix}-dropdown-image) center no-repeat;
-      transition: transform var(#{$ux-prefix}-transition-duration) var(#{$ux-prefix}-transition-easing);
+      transition: transform var(#{$ux-prefix}-transition-duration)
+        var(#{$ux-prefix}-transition-easing);
 
       #{$ux}.-disabled & {
         background-image: var(#{$ux-prefix}-dropdown-disabled-image);
@@ -178,7 +181,8 @@
       border-radius: var(#{$ux-prefix}-border-radius);
       background-color: var(#{$ux-prefix}-search-background-color);
       color: var(#{$ux-prefix}-search-text-color);
-      transition: border-color var(#{$ux-prefix}-transition-duration) var(#{$ux-prefix}-transition-easing);
+      transition: border-color var(#{$ux-prefix}-transition-duration)
+        var(#{$ux-prefix}-transition-easing);
 
       &::placeholder {
         color: var(#{$ux-prefix}-search-placeholder-color);
@@ -215,7 +219,8 @@
     justify-content: flex-start;
     padding: var(#{$ux-prefix}-padding-y) var(#{$ux-prefix}-padding-x);
     background-color: var(#{$ux-prefix}-background-color);
-    transition: background-color var(#{$ux-prefix}-transition-duration) var(#{$ux-prefix}-transition-easing);
+    transition: background-color var(#{$ux-prefix}-transition-duration)
+      var(#{$ux-prefix}-transition-easing);
 
     &:hover {
       background-color: var(#{$ux-prefix}-option-hovered-bg-color);
@@ -229,7 +234,8 @@
       justify-content: center;
       width: var(#{$ux-prefix}-select-all-checkbox-size);
       height: var(#{$ux-prefix}-select-all-checkbox-size);
-      border: var(#{$ux-prefix}-select-all-checkbox-border-width) solid var(#{$ux-prefix}-select-all-checkbox-color);
+      border: var(#{$ux-prefix}-select-all-checkbox-border-width) solid
+        var(#{$ux-prefix}-select-all-checkbox-color);
       border-radius: var(#{$ux-prefix}-select-all-checkbox-border-radius);
 
       &:after {
@@ -265,7 +271,10 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     max-height: calc(
-      ((var(#{$ux-prefix}-font-size) * var(#{$ux-prefix}-line-height)) + (var(#{$ux-prefix}-padding-y) * 2)) * 5
+      (
+          (var(#{$ux-prefix}-font-size) * var(#{$ux-prefix}-line-height)) +
+            (var(#{$ux-prefix}-padding-y) * 2)
+        ) * 5
     );
   }
 
@@ -298,10 +307,11 @@
 
     &__elem {
       user-select: none;
-      padding: var(#{$ux-prefix}-padding-y) var(#{$ux-prefix}-padding-x) var(#{$ux-prefix}-padding-y)
-        calc(var(#{$ux-prefix}-padding-x) * 2);
+      padding: var(#{$ux-prefix}-padding-y) var(#{$ux-prefix}-padding-x)
+        var(#{$ux-prefix}-padding-y) calc(var(#{$ux-prefix}-padding-x) * 2);
       background-color: var(#{$ux-prefix}-background-color);
-      transition: background-color var(#{$ux-prefix}-transition-duration) var(#{$ux-prefix}-transition-easing);
+      transition: background-color var(#{$ux-prefix}-transition-duration)
+        var(#{$ux-prefix}-transition-easing);
 
       #{$ux}.-radio &,
       #{$ux}.-checkbox & {
@@ -318,8 +328,10 @@
           height: var(#{$ux-prefix}-font-size);
           outline: var(#{$ux-prefix}-option-styled-outline-width) solid
             var(#{$ux-prefix}-option-styled-background-color);
-          border: var(#{$ux-prefix}-option-styled-border-width) solid var(#{$ux-prefix}-background-color);
-          transition: background-color var(#{$ux-prefix}-transition-duration) var(#{$ux-prefix}-transition-easing);
+          border: var(#{$ux-prefix}-option-styled-border-width) solid
+            var(#{$ux-prefix}-background-color);
+          transition: background-color var(#{$ux-prefix}-transition-duration)
+            var(#{$ux-prefix}-transition-easing);
         }
       }
 
@@ -355,7 +367,8 @@
           #{$ux}.-radio &,
           #{$ux}.-checkbox & {
             &:after {
-              border: var(#{$ux-prefix}-option-styled-border-width) solid var(#{$ux-prefix}-option-hovered-bg-color);
+              border: var(#{$ux-prefix}-option-styled-border-width) solid
+                var(#{$ux-prefix}-option-hovered-bg-color);
             }
           }
         }
@@ -374,7 +387,8 @@
         #{$ux}.-radio &,
         #{$ux}.-checkbox & {
           &:after {
-            border: var(#{$ux-prefix}-option-styled-border-width) solid var(#{$ux-prefix}-option-hovered-bg-color);
+            border: var(#{$ux-prefix}-option-styled-border-width) solid
+              var(#{$ux-prefix}-option-hovered-bg-color);
             background-color: var(#{$ux-prefix}-option-styled-background-color);
           }
         }

@@ -30,7 +30,7 @@ Install plugin files from **_dist_** directory;
 ### ES-module
 
 ```javascript
-import UxSelect from 'ux-select/dist/js/ux-select.es.js';
+import UxSelect from 'ux-select/dist/js/ux-select.es.js'
 ```
 
 ### Non ES-module
@@ -45,7 +45,7 @@ import UxSelect from 'ux-select/dist/js/ux-select.es.js';
 #### Initialize ux-select in .js file
 
 ```javascript
-const myUxSelect = new UxSelect(element, params);
+const myUxSelect = new UxSelect(element, params)
 ```
 
 ## Style customization

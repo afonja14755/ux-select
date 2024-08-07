@@ -1,6 +1,6 @@
 {
   "name": "ux-select",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
   "keywords": [
     "web",
@@ -25,21 +25,19 @@
   "main": "./src/ux-select.ts",
   "types": "./src/types.d.ts",
   "scripts": {
-    "lint": "eslint --ignore-path .eslintignore .",
-    "check-format": "prettier --ignore-path .prettierignore -l .",
-    "format": "prettier --ignore-path .prettierignore -w .",
-    "build": "npm run format && npm run lint && tsc && vite build"
+    "format": "prettier -w ./src",
+    "lint": "eslint . --ext .ts --max-warnings 0",
+    "build": "tsc && vite build"
   },
   "devDependencies": {
-    "@types/node": "^20.4.4",
-    "@typescript-eslint/eslint-plugin": "^6.2.0",
-    "@typescript-eslint/parser": "^6.2.0",
-    "eslint": "^8.46.0",
-    "path": "^0.12.7",
-    "prettier": "^3.2.4",
-    "sass": "^1.64.1",
-    "typescript": "^5.1.6",
-    "vite": "^4.5.3",
+    "@types/node": "^22.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.1",
+    "@typescript-eslint/parser": "^8.0.1",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.3",
+    "sass": "^1.77.6",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0",
     "vite-plugin-css-injected-by-js": "^3.2.1"
   },
   "repository": {
