@@ -25,6 +25,8 @@ class f {
     this.el = e, this.config = {
       isSearchable: this.el.dataset.isSearchable !== void 0 ? this.el.dataset.isSearchable === "true" : s.isSearchable ?? !1,
       isSearchFocus: this.el.dataset.isSearchFocus !== void 0 ? this.el.dataset.isSearchFocus === "true" : s.isSearchFocus ?? !1,
+      searchName: this.el.dataset.searchName !== void 0 ? this.el.dataset.searchName : s.searchName ?? "",
+      isDisplaySelectedItems: this.el.dataset.isDisplaySelectedItems !== void 0 ? this.el.dataset.isDisplaySelectedItems === "true" : s.isDisplaySelectedItems ?? !1,
       isGroupOptions: this.el.dataset.isGroupOptions !== void 0 ? this.el.dataset.isGroupOptions === "true" : s.isGroupOptions ?? !1,
       hideOnClear: this.el.dataset.hideOnClear !== void 0 ? this.el.dataset.hideOnClear === "true" : s.hideOnClear ?? !0,
       hideOnSelect: this.el.dataset.hideOnSelect !== void 0 ? this.el.dataset.hideOnSelect === "true" : s.hideOnSelect ?? !1,
@@ -91,7 +93,7 @@ class f {
   }
   setSelectState() {
     const e = this.uxEl.querySelector(".ux-select__title"), s = this.options.reduce((i, o) => (o.attributes.selected && i.push(o.data.text), i), []);
-    if (s.length > 0 ? (s.length === 1 ? e.textContent = s[0] : this.state.multiple && (e.textContent = `${this.localization.selectedText} ${s.length}`), this.uxEl.classList.add("-filled")) : (e.textContent = this.localization.placeholder, this.uxEl.classList.remove("-filled")), this.config.isGroupOptions)
+    if (s.length > 0 ? (s.length === 1 ? e.textContent = s[0] : this.state.multiple && (e.textContent = this.config.isDisplaySelectedItems ? s.join(", ") : `${this.localization.selectedText} ${s.length}`), this.uxEl.classList.add("-filled")) : (e.textContent = this.localization.placeholder, this.uxEl.classList.remove("-filled")), this.config.isGroupOptions)
       for (const i of this.groups) {
         const o = this.uxEl.querySelector(`[data-ux-group="${i}"]`);
         if (!o) continue;
@@ -175,7 +177,7 @@ class f {
       const l = document.createElement("div");
       l.classList.add("ux-select__search");
       const a = document.createElement("input");
-      a.type = "search", a.name = "ux-select-search", a.classList.add("ux-select-search__input"), a.placeholder = this.localization.searchText, this.uxSearchInput = a, l.appendChild(a), i.appendChild(l);
+      a.type = "search", this.config.searchName && (a.name = this.config.searchName), a.classList.add("ux-select-search__input"), a.placeholder = this.localization.searchText, this.uxSearchInput = a, l.appendChild(a), i.appendChild(l);
     }
     this.createGroupAndOptions();
     const o = document.createElement("div"), t = ["ux-select", this.el.classList];
