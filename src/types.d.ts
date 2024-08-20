@@ -1,6 +1,8 @@
 export type UxSelectParams = {
   isSearchable?: boolean
   isSearchFocus?: boolean
+  searchName?: string
+  isDisplaySelectedItems?: boolean
   isGroupOptions?: boolean
   hideOnClear?: boolean
   hideOnSelect?: boolean
@@ -44,6 +46,8 @@ export type UxSelectConfig = Pick<
   UxSelectParams,
   | 'isSearchable'
   | 'isSearchFocus'
+  | 'searchName'
+  | 'isDisplaySelectedItems'
   | 'isGroupOptions'
   | 'hideOnClear'
   | 'hideOnSelect'

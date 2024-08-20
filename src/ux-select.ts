@@ -45,6 +45,14 @@ export default class UxSelect {
         this.el.dataset.isSearchFocus !== undefined
           ? this.el.dataset.isSearchFocus === 'true'
           : (params.isSearchFocus ?? false),
+      searchName:
+        this.el.dataset.searchName !== undefined
+          ? this.el.dataset.searchName
+          : (params.searchName ?? ''),
+      isDisplaySelectedItems:
+        this.el.dataset.isDisplaySelectedItems !== undefined
+          ? this.el.dataset.isDisplaySelectedItems === 'true'
+          : (params.isDisplaySelectedItems ?? false),
       isGroupOptions:
         this.el.dataset.isGroupOptions !== undefined
           ? this.el.dataset.isGroupOptions === 'true'
@@ -175,7 +183,9 @@ export default class UxSelect {
       if (selectedTexts.length === 1) {
         selectTitle.textContent = selectedTexts[0]
       } else if (this.state.multiple) {
-        selectTitle.textContent = `${this.localization.selectedText} ${selectedTexts.length}`
+        selectTitle.textContent = this.config.isDisplaySelectedItems
+          ? selectedTexts.join(', ')
+          : `${this.localization.selectedText} ${selectedTexts.length}`
       }
       this.uxEl.classList.add('-filled')
     } else {
@@ -376,7 +386,7 @@ export default class UxSelect {
 
       const selectSearch = document.createElement('input')
       selectSearch.type = 'search'
-      selectSearch.name = 'ux-select-search'
+      if (this.config.searchName) selectSearch.name = this.config.searchName
       selectSearch.classList.add('ux-select-search__input')
       selectSearch.placeholder = this.localization.searchText
       this.uxSearchInput = selectSearch
