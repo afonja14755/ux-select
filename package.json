@@ -1,6 +1,6 @@
 {
   "name": "ux-select",
-  "version": "2.6.0",
+  "version": "3.0.0",
   "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
   "keywords": [
     "web",
@@ -21,24 +21,41 @@
     "ES-module",
     "Non ES-module"
   ],
+  "engines": {
+    "node": ">=20.17.0",
+    "npm": ">=10.8.2"
+  },
+  "engineStrict": true,
   "type": "module",
   "main": "./src/ux-select.ts",
   "types": "./src/types.d.ts",
   "scripts": {
-    "format": "prettier -w ./src",
-    "lint": "eslint . --ext .ts --max-warnings 0",
+    "prepare": "husky",
+    "format": "prettier --write \"./**/*.{ts,tsx,json,css,scss,md}\"",
+    "lint": "eslint -c eslint.config.js --fix --max-warnings 0",
     "build": "tsc && vite build"
   },
+  "lint-staged": {
+    "*.{ts, js}": [
+      "eslint -c eslint.config.js --fix --report-unused-disable-directives --max-warnings 0",
+      "prettier --write"
+    ],
+    "*.{json,css,scss,md}": "prettier --write"
+  },
   "devDependencies": {
-    "@types/node": "^22.1.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.1",
-    "@typescript-eslint/parser": "^8.0.1",
-    "eslint": "^8.57.0",
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@eslint/js": "^9.9.1",
+    "@types/node": "^22.5.0",
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0",
+    "lint-staged": "^15.2.9",
     "prettier": "^3.3.3",
     "sass": "^1.77.6",
     "typescript": "^5.5.4",
-    "vite": "^5.4.0",
-    "vite-plugin-css-injected-by-js": "^3.2.1"
+    "typescript-eslint": "^8.2.0",
+    "vite": "^5.4.2",
+    "vite-plugin-css-injected-by-js": "^3.5.1"
   },
   "repository": {
     "type": "git",
