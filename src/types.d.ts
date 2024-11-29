@@ -25,6 +25,7 @@ export type UxSelectOptions = {
   data: {
     text: string
     value: string
+    selectedDisplayText?: string
   }
   image?: {
     src: string

@@ -1,6 +1,6 @@
 {
   "name": "ux-select",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "UX Select is a lightweight Native JavaScript plugin that replace native select elements with customization",
   "keywords": [
     "web",
@@ -37,7 +37,7 @@
     "prettier": "^3.3.3",
     "sass": "^1.77.6",
     "typescript": "^5.5.4",
-    "vite": "^5.4.0",
+    "vite": "^5.4.11",
     "vite-plugin-css-injected-by-js": "^3.2.1"
   },
   "repository": {
