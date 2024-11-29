@@ -72,7 +72,8 @@ class f {
         },
         data: {
           text: t.textContent ? t.textContent.trim() : "",
-          value: t.value
+          value: t.value,
+          selectedDisplayText: t.dataset.selectedDisplayText
         },
         image: n,
         svg: r,
@@ -92,7 +93,7 @@ class f {
     return Array.from(i);
   }
   setSelectState() {
-    const e = this.uxEl.querySelector(".ux-select__title"), s = this.options.reduce((i, o) => (o.attributes.selected && i.push(o.data.text), i), []);
+    const e = this.uxEl.querySelector(".ux-select__title"), s = this.options.reduce((i, o) => (o.attributes.selected && i.push(o.data.selectedDisplayText || o.data.text), i), []);
     if (s.length > 0 ? (s.length === 1 ? e.textContent = s[0] : this.state.multiple && (e.textContent = this.config.isDisplaySelectedItems ? s.join(", ") : `${this.localization.selectedText} ${s.length}`), this.uxEl.classList.add("-filled")) : (e.textContent = this.localization.placeholder, this.uxEl.classList.remove("-filled")), this.config.isGroupOptions)
       for (const i of this.groups) {
         const o = this.uxEl.querySelector(`[data-ux-group="${i}"]`);

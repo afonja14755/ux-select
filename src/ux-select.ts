@@ -141,7 +141,8 @@ export default class UxSelect {
         },
         data: {
           text: option.textContent ? option.textContent.trim() : '',
-          value: option.value
+          value: option.value,
+          selectedDisplayText: option.dataset.selectedDisplayText
         },
         image: optionImage,
         svg: optionSvg,
@@ -175,7 +176,7 @@ export default class UxSelect {
     const selectTitle = this.uxEl.querySelector('.ux-select__title') as Element
 
     const selectedTexts = this.options.reduce<string[]>((acc, item) => {
-      if (item.attributes.selected) acc.push(item.data.text)
+      if (item.attributes.selected) acc.push(item.data.selectedDisplayText || item.data.text)
       return acc
     }, [])
 
