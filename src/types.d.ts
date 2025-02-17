@@ -11,6 +11,7 @@ export type UxSelectParams = {
   selectAllOption?: boolean
   placeholder?: string
   searchText?: string
+  emptySearchText?: string
   clearText?: string
   selectedText?: string
   selectAllText?: string
@@ -61,6 +62,7 @@ export type UxSelectLocalization = Pick<
   UxSelectParams,
   'placeholder',
   'searchText',
+  'emptySearchText',
   'clearText',
   'selectedText',
   'selectAllText'
