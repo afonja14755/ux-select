@@ -30,6 +30,7 @@ export default class UxSelect {
 
   private uxBody: HTMLDivElement | undefined
   private uxSearchInput: HTMLInputElement | undefined
+  private uxSearchOverlay: HTMLDivElement | undefined
   private uxClearButton: HTMLButtonElement | undefined
   private uxSelectAll: HTMLDivElement | undefined
 
@@ -78,6 +79,8 @@ export default class UxSelect {
     this.localization = {
       placeholder: this.el.dataset.placeholder ?? params.placeholder ?? 'Select an option',
       searchText: this.el.dataset.searchText ?? params.searchText ?? 'Search',
+      emptySearchText:
+        this.el.dataset.emptySearchText ?? params.emptySearchText ?? 'No results found',
       clearText: this.el.dataset.clearText ?? params.clearText ?? 'Clear option(s)',
       selectedText: this.el.dataset.selectedText ?? params.selectedText ?? 'Selected:',
       selectAllText: this.el.dataset.selectAllText ?? params.selectAllText ?? 'Select all'
@@ -392,7 +395,13 @@ export default class UxSelect {
       selectSearch.placeholder = this.localization.searchText
       this.uxSearchInput = selectSearch
 
+      const selectSearchOverlay = document.createElement('div')
+      selectSearchOverlay.classList.add('ux-select-search__overlay')
+      selectSearchOverlay.textContent = this.localization.emptySearchText
+      this.uxSearchOverlay = selectSearchOverlay
+
       selectSearchWrap.appendChild(selectSearch)
+      selectSearchWrap.appendChild(selectSearchOverlay)
       selectBody.appendChild(selectSearchWrap)
     }
 
@@ -476,6 +485,12 @@ export default class UxSelect {
   destroy(): void {
     this.uxEl.remove()
     this.el.style.display = ''
+  }
+
+  getSelectedValues(): string[] {
+    return [...this.options]
+      .filter((option) => option.attributes.selected)
+      .map((option) => option.data.value)
   }
 
   private onToggleShown(e: Event): void {
@@ -597,10 +612,17 @@ export default class UxSelect {
         }
       }
 
+      if (this.uxSearchOverlay) this.uxSearchOverlay.style.display = 'none'
+      if (this.uxSelectAll) this.uxSelectAll.style.display = 'flex'
+
       return
     }
 
     const searchValue = new RegExp(escapedText)
+
+    const isMatch = this.options.some((option) => {
+      return searchValue.test(normalizeText(option.data.text))
+    })
 
     for (const option of this.options) {
       const match = searchValue.test(normalizeText(option.data.text))
@@ -617,6 +639,9 @@ export default class UxSelect {
         }
       }
     }
+
+    if (this.uxSearchOverlay) this.uxSearchOverlay.style.display = isMatch ? 'none' : 'block'
+    if (this.uxSelectAll) this.uxSelectAll.style.display = isMatch ? 'flex' : 'none'
 
     triggerInput(this.el)
   }

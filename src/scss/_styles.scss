@@ -43,6 +43,12 @@
   #{$ux-prefix}-search-text-color: $ux-search-text-color;
   #{$ux-prefix}-search-placeholder-color: $ux-search-placeholder-color;
 
+  // Search overlay
+  #{$ux-prefix}-search-overlay-padding-y: $ux-search-overlay-padding-y;
+  #{$ux-prefix}-search-overlay-font-size: $ux-search-overlay-font-size;
+  #{$ux-prefix}-search-overlay-font-weight: $ux-search-overlay-font-weight;
+  #{$ux-prefix}-search-overlay-text-align: $ux-search-overlay-text-align;
+
   // Transitions
   #{$ux-prefix}-transition-duration: $ux-transition-duration;
   #{$ux-prefix}-transition-easing: $ux-transition-easing;
@@ -212,6 +218,14 @@
       &:focus {
         border-color: var(#{$ux-prefix}-border-hover-color);
       }
+    }
+
+    &__overlay {
+      display: none;
+      padding: var(#{$ux-prefix}-search-overlay-padding-y) 0.25rem;
+      font-size: var(#{$ux-prefix}-search-overlay-font-size);
+      font-weight: var(#{$ux-prefix}-search-overlay-font-weight);
+      text-align: var(#{$ux-prefix}-search-overlay-text-align);
     }
   }
 

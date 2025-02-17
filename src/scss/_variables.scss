@@ -44,6 +44,12 @@ $ux-search-background-color: rgb(255 255 255);
 $ux-search-text-color: rgb(34 34 34);
 $ux-search-placeholder-color: rgb(169 169 169);
 
+// Search overlay
+$ux-search-overlay-padding-y: 1rem;
+$ux-search-overlay-font-size: 1rem;
+$ux-search-overlay-font-weight: 700;
+$ux-search-overlay-text-align: center;
+
 // Transition
 $ux-transition-duration: 0.2s;
 $ux-transition-easing: ease-in-out;
