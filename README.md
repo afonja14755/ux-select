@@ -52,10 +52,6 @@ const myUxSelect = new UxSelect(element, params)
 
 You can customize styles by replace CSS-variables what contain "--uxs" prefix and placed on :root.
 
-## Documentation
-
-More details on **[ux-select.com](https://ux-select.com/)**.
-
 ## License
 
 UX Select is licensed by [MIT](https://choosealicense.com/licenses/mit/)
